@@ -7,6 +7,7 @@ function PlotSpecification(xParameter, yParameter, xRange, yRange) {
     this.xRange = xRange;
     this.yRange = yRange;
 
+
     this.getXParameter = function () {
         return this.xParameter;
     }

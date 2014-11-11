@@ -13,6 +13,14 @@ function MockLinearScale() {
         this.maxDomain = domainArray[1];
         return this;
     }
+
+}
+function MockScale(dataToScaledData){
+
+    function scale(x) {
+        return dataToScaledData[x];
+    }
+    return scale;
 }
 
 function MockAxis (){

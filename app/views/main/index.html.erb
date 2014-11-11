@@ -1,12 +1,15 @@
 <script>
   $(function() {
-      canvas = makeBarGraph("canvas_boss");
-      canvas.render(500, 500);
-//      var testData =  [{ date: '2014-01', value: 100}, { date: '2014-02', value: 140}, {date: '2014-03', value: 215}];
-//      c = barChart();
-//      c.setData(testData);
-//      c.render();
-//      c.addAxis();
+      var dataset = new Dataset([10], [20], [30], [40]);
+      var dotPlot = new DotPlot('testPlot', new PlotSpecification(CH1, CH2, new Range(0, 50), new Range(10, 100)), dataset);
+      dotPlot.renderPlot('div#canvas_plot1', 500,500);
+      dotPlot.renderPlot('div#canvas_plot2', 250,250);
+
   });
 </script>
-<div id="canvas_boss"></div>
+<div id="canvas_plot1"></div>
+<div id="canvas_plot2"></div>
+<div id="canvas_plot3"></div>
+<div id="canvas_plot4"></div>
+<div id="canvas_plot5"></div>
+<div id="canvas_plot6"></div>
