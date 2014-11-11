@@ -1,9 +1,11 @@
 <script>
   $(function() {
       var dataset = new Dataset([10], [20], [30], [40]);
-      var dotPlot = new DotPlot('testPlot', new PlotSpecification(CH1, CH2, new Range(0, 50), new Range(10, 100)), dataset);
-      dotPlot.renderPlot('div#canvas_plot1', 500,500);
-      dotPlot.renderPlot('div#canvas_plot2', 250,250);
+      var plotModel = new PlotModel('div#canvas_plot1', 'plot1', 500, 500);
+      window.plotSpec = new PlotSpecification('plot1', CH1, CH2, new Range(0, 50), new Range(10, 100));
+      var dotPlot = new DotPlot(plotModel, window.plotSpec, dataset);
+      dotPlot.renderPlot();
+
 
   });
 </script>
@@ -13,3 +15,7 @@
 <div id="canvas_plot4"></div>
 <div id="canvas_plot5"></div>
 <div id="canvas_plot6"></div>
+<button onclick="window.plotSpec.setXParameter(CH1)">1</button>
+<button onclick="window.plotSpec.setXParameter(CH2)">2</button>
+<button onclick="window.plotSpec.setXParameter(CH3)">3</button>
+<button onclick="window.plotSpec.setXParameter(CH4)">4</button>

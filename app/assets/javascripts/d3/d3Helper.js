@@ -1,20 +1,20 @@
 function buildXScale(range, domain) {
     var scale = d3.scale;
-
     var linear = scale.linear();
     linear.range([range.min, range.max]);
     linear.domain([domain.min, domain.max]);
     return linear;
 }
-function buildYScale(range, domain){
+
+function buildYScale(range, domain) {
     var scale = d3.scale;
     var linear = scale.linear();
     linear.range([range.min, range.max]);
     linear.domain([domain.max, domain.min]);
     return linear;
 }
-function renderCanvas(parent, className, width, height) {
-    var canvas = d3.select(parent).append('svg').attr('class', className)
+function renderCanvas(parent, canvasId, width, height) {
+    var canvas = d3.select(parent).append('svg').attr('id', canvasId)
         .attr('height', height)
         .attr('width', width);
     return canvas;
@@ -30,7 +30,6 @@ function buildAxis(canvas, scale, xTranslate, yTranslate, className, orientation
 }
 
 function renderXAxis(canvas, xScale, xTranslate, yTranslate) {
-
     buildAxis(canvas, xScale, xTranslate, yTranslate, 'x axis', 'bottom');
 }
 
@@ -48,7 +47,7 @@ function formatData(xChannel, yChannel, xScale, yScale) {
 }
 
 function renderData(canvas, data, xAxisOffset, yAxisOffset) {
-    var dataGroup = canvas.append('g').attr('transform', 'translate('+ xAxisOffset +', '+yAxisOffset+')');
+    var dataGroup = canvas.append('g').attr('transform', 'translate(' + xAxisOffset + ', ' + yAxisOffset + ')');
     dataGroup.selectAll(".dot")
         .data(data)
         .enter().append("circle")

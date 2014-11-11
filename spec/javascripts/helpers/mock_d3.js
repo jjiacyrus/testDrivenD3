@@ -43,7 +43,7 @@ function buildD3SpyNode(parent, name) {
         return parent[name];
     }
 
-    var spy = jasmine.createSpyObj(name, ['append', 'attr', 'call', 'datum']);
+    var spy = jasmine.createSpyObj(name, ['append', 'attr', 'call', 'datum', 'remove']);
 
     spy.attr.and.returnValue(spy);
     spy.call.and.returnValue(spy);

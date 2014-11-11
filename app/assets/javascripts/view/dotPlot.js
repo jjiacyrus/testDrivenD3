@@ -1,7 +1,7 @@
-/**
- * Created by Cyrus on 11/7/14.
- */
-function DotPlot(className, plotSpec, dataSet) {
+
+function DotPlot(plotModel, plotSpec, dataSet) {
+    plotSpec.addObserver(this);
+
     function renderAxes(canvas, xScale, yScale, xAxisOffset, yHeight) {
         renderXAxis(canvas, xScale, xAxisOffset, yHeight);
         renderYAxis(canvas, yScale, xAxisOffset, 0);
@@ -28,7 +28,9 @@ function DotPlot(className, plotSpec, dataSet) {
         renderData(canvas, formattedData,xAxisOffset, 0);
     }
 
-    this.renderPlot = function (parentNode, width, height) {
+    this.renderPlot = function () {
+        var height = plotModel.getHeight();
+        var width = plotModel.getWidth();
         var xRightPadding = 65;
         var yBottomPadding = 10;
         var yTopPadding = 30;
@@ -38,10 +40,14 @@ function DotPlot(className, plotSpec, dataSet) {
         var yScale = buildYScale(new Range(yBottomPadding, yHeight), plotSpec.getYRange());
 
         var xAxisOffset = 50;
-        var canvas = renderCanvas(parentNode, className, width, height);
+        var canvas = renderCanvas(plotModel.getParentNode(), plotModel.getPlotId(), width, height);
 
 
         renderAxes(canvas, xScale, yScale, xAxisOffset, yHeight);
         renderPlotData(canvas, dataSet, plotSpec, xScale, yScale, xAxisOffset);
+    }
+    this.specificationChanged = function(){
+        d3.select('svg#'+plotModel.getPlotId()).remove();
+        this.renderPlot();
     }
 }

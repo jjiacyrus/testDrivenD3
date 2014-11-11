@@ -10,19 +10,19 @@ describe("Dot Plot", function () {
 
         var plotSpec = new PlotSpecification();
 
-
         var xDomain = new Range(12, 223);
         var yDomain = new Range(46212, 223);
         plotSpec.setXRange(xDomain);
         plotSpec.setYRange(yDomain);
 
-        var plotClass = "plotterton";
+        var plotId = "plotterton";
         var dataset = new Dataset([], [], [], []);
-        dotPlot = new DotPlot(plotClass, plotSpec, dataset);
-
-
         var width = 1000;
         var height = 500;
+
+        var plotModel = new PlotModel(parentNode, plotId, width, height);
+        dotPlot = new DotPlot(plotModel, plotSpec, dataset);
+
 
         var expectedCanvas = d3.select('body').append('svg');
         var mockXScale = new MockScale();
@@ -38,8 +38,8 @@ describe("Dot Plot", function () {
         var renderXAxisSpy = spyOn(window, 'renderXAxis');
         var renderYAxisSpy = spyOn(window, 'renderYAxis');
 
-        dotPlot.renderPlot(parentNode, width, height);
-        expect(renderCanvasSpy).toHaveBeenCalledWith(parentNode, plotClass, 1000, 500);
+        dotPlot.renderPlot();
+        expect(renderCanvasSpy).toHaveBeenCalledWith(parentNode, plotId, 1000, 500);
         expect(buildXScaleSpy).toHaveBeenCalledWith(new Range(0, 935), xDomain);
         expect(buildYScaleSpy).toHaveBeenCalledWith(new Range(10, 470), yDomain);
 
@@ -59,9 +59,11 @@ describe("Dot Plot", function () {
         plotSpec.setXParameter(CH2);
         plotSpec.setYParameter(CH4);
 
-        var plotClass = "plotterton";
+        var plotId = "plotterton";
         var dataset = new Dataset([], [], [], []);
-        dotPlot = new DotPlot(plotClass, plotSpec, dataset);
+        var plotModel = new PlotModel(parentNode, plotId, 1000, 500);
+
+        dotPlot = new DotPlot(plotModel, plotSpec, dataset);
 
 
         var canvas = d3.select('body').append('svg');
@@ -73,7 +75,6 @@ describe("Dot Plot", function () {
 
         spyOn(window, 'renderCanvas').and.returnValue(canvas);
 
-        var i = 0;
         spyOn(window, 'buildXScale').and.returnValue(mockXScale);
         spyOn(window, 'buildYScale').and.returnValue(mockYScale);
         var getChannel2Spy = spyOn(dataset, 'getChannel2').and.returnValue(channel2Data);
@@ -90,12 +91,12 @@ describe("Dot Plot", function () {
         var renderDataSpy = spyOn(window, 'renderData');
 
 
-        dotPlot.renderPlot(parentNode, 1000, 500);
+        dotPlot.renderPlot();
 
         expect(getChannel2Spy).toHaveBeenCalled();
         expect(getChannel4Spy).toHaveBeenCalled();
         expect(formatDataSpy).toHaveBeenCalledWith(channel2Data, channel4Data, mockXScale, mockYScale);
-        expect(renderDataSpy).toHaveBeenCalledWith(canvas, formattedData,50, 0);
+        expect(renderDataSpy).toHaveBeenCalledWith(canvas, formattedData, 50, 0);
 
     });
 
@@ -110,9 +111,12 @@ describe("Dot Plot", function () {
         plotSpec.setXParameter(CH3);
         plotSpec.setYParameter(CH1);
 
-        var plotClass = "plotterton";
+        var plotId = "plotterton";
         var dataset = new Dataset([], [], [], []);
-        dotPlot = new DotPlot(plotClass, plotSpec, dataset);
+
+        var plotModel = new PlotModel(parentNode, plotId, 1000, 500);
+
+        dotPlot = new DotPlot(plotModel, plotSpec, dataset);
 
 
         var canvas = d3.select('body').append('svg');
@@ -124,7 +128,6 @@ describe("Dot Plot", function () {
 
         spyOn(window, 'renderCanvas').and.returnValue(canvas);
 
-        var i = 0;
         spyOn(window, 'buildXScale').and.returnValue(mockXScale);
         spyOn(window, 'buildYScale').and.returnValue(mockYScale);
         var getChannel1Spy = spyOn(dataset, 'getChannel1').and.returnValue(channel1Data);
@@ -141,12 +144,42 @@ describe("Dot Plot", function () {
         var renderDataSpy = spyOn(window, 'renderData');
 
 
-        dotPlot.renderPlot(parentNode, 1000, 500);
+        dotPlot.renderPlot();
 
         expect(getChannel1Spy).toHaveBeenCalled();
         expect(getChannel3Spy).toHaveBeenCalled();
         expect(formatDataSpy).toHaveBeenCalledWith(channel3Data, channel1Data, mockXScale, mockYScale);
-        expect(renderDataSpy).toHaveBeenCalledWith(canvas, formattedData,50, 0);
+        expect(renderDataSpy).toHaveBeenCalledWith(canvas, formattedData, 50, 0);
+
+    });
+
+    it('adds itself as observer to the plot spec on construction', function () {
+        var parentNode = "div#target-div";
+
+        var plotSpec = new PlotSpecification();
+        var addObserverSpy = spyOn(plotSpec, 'addObserver');
+        var plotModel = new PlotModel(parentNode, "plotterton", 1000, 500);
+
+        dotPlot = new DotPlot(plotModel, plotSpec, new Dataset([], [], [], []));
+        expect(addObserverSpy).toHaveBeenCalledWith(dotPlot);
+    });
+
+    it('removes the previous svg and rerenders when specification changed is called', function () {
+        var parentNode = "div#target-div";
+
+        var plotSpec = new PlotSpecification();
+        var plotModel = new PlotModel(parentNode, "plotterton", 1000, 500);
+
+        dotPlot = new DotPlot(plotModel, plotSpec, new Dataset([], [], [], []));
+        var renderSpy = spyOn(dotPlot, 'renderPlot');
+        var svgSpy = buildD3SpyNode(parentNode, 'svg');
+        var selectSpy = spyOn(d3, 'select').and.returnValue(svgSpy);
+
+        dotPlot.specificationChanged();
+        expect(selectSpy).toHaveBeenCalledWith('svg#plotterton');
+        expect(svgSpy.remove).toHaveBeenCalled();
+        expect(renderSpy).toHaveBeenCalled();
+
 
     });
 

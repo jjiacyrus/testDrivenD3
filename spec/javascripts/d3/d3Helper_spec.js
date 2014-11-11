@@ -3,8 +3,6 @@ describe('d3 Helpers', function () {
 
     it('should return a scale based on the canvas size and the range', function () {
         var scaleToReturn = new MockLinearScale();
-
-
         d3.scale.linear = function () {
             return scaleToReturn;
         };
@@ -22,8 +20,6 @@ describe('d3 Helpers', function () {
         expect(scale.maxDomain).toEqual(theDomain.max);
 
     });
-
-
 
     it('should return a scale based on the canvas size and the range with a flipped max and min for y', function () {
         var scaleToReturn = new MockLinearScale();
@@ -61,7 +57,7 @@ describe('d3 Helpers', function () {
         expect(canvasSvg).toEqual(theCanvas);
         expect(canvasSvg.empty()).toBeFalsy();
 
-        expect(canvasSvg.attr('class')).toBe('canvas_mcgee');
+        expect(canvasSvg.attr('id')).toBe('canvas_mcgee');
         expect(canvasSvg.attr('width')).toBe(width + "");
         expect(canvasSvg.attr('height')).toBe(height + "");
 
