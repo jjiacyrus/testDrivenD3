@@ -7,6 +7,9 @@
     margin-bottom: 10px;
     position: relative;
 }
+button{
+    border: none;
+}
 
 .plotCorral button.createDotPlot {
     position: absolute;

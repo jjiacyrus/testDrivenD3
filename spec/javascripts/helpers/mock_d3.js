@@ -26,12 +26,17 @@ function MockScale(dataToScaledData){
 function MockAxis (){
     this.scalePassedIn = undefined;
     this.orientation = "";
+    this.tickValues = "";
     this.scale = function(scalePassedIn){
         this.scalePassedIn =  scalePassedIn;
         return this;
     }
     this.orient = function(orientation){
         this.orientation = orientation;
+        return this;
+    }
+    this.tickValues =function(tickValues){
+        this.tickValues = tickValues;
         return this;
     }
 
