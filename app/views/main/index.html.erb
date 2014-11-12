@@ -1,21 +1,34 @@
 <script>
-  $(function() {
-      var dataset = new Dataset([10], [20], [30], [40]);
-      var plotModel = new PlotModel('div#canvas_plot1', 'plot1', 500, 500);
-      window.plotSpec = new PlotSpecification('plot1', CH1, CH2, new Range(0, 50), new Range(10, 100));
-      var dotPlot = new DotPlot(plotModel, window.plotSpec, dataset);
-      dotPlot.renderPlot();
-
-
-  });
+    $(function () {
+        var dataset = new Dataset([10], [20], [30], [40]);
+        corral1 = new PlotCorral('div#canvas_plot1', 1, dataset);
+        corral2 = new PlotCorral('div#canvas_plot2', 2, dataset);
+        corral3 = new PlotCorral('div#canvas_plot3', 3, dataset);
+        corral4 = new PlotCorral('div#canvas_plot4', 4, dataset);
+    });
 </script>
-<div id="canvas_plot1"></div>
-<div id="canvas_plot2"></div>
-<div id="canvas_plot3"></div>
-<div id="canvas_plot4"></div>
-<div id="canvas_plot5"></div>
-<div id="canvas_plot6"></div>
-<button onclick="window.plotSpec.setXParameter(CH1)">1</button>
-<button onclick="window.plotSpec.setXParameter(CH2)">2</button>
-<button onclick="window.plotSpec.setXParameter(CH3)">3</button>
-<button onclick="window.plotSpec.setXParameter(CH4)">4</button>
+<div id="canvas_plot1" class="plotCorral">
+  <div class="canvas">
+    <button onclick="corral1.createDotPlot()" class="createDotPlot">+</button>
+
+  </div>
+</div>
+
+<div id="canvas_plot2" class="plotCorral">
+  <div class="canvas">
+    <button onclick="corral2.createDotPlot()" class="createDotPlot">+</button>
+  </div>
+</div>
+
+<div id="canvas_plot3" class="plotCorral">
+  <div class="canvas">
+    <button onclick="corral3.createDotPlot()" class="createDotPlot">+</button>
+
+  </div>
+</div>
+
+<div id="canvas_plot4" class="plotCorral">
+  <div class="canvas">
+    <button onclick="corral4.createDotPlot()" class="createDotPlot">+</button>
+  </div>
+</div>
