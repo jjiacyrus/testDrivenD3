@@ -1,4 +1,7 @@
-function PlotCorral(parentNode, corralNumber, dataSet) {
+function PlotCorral(parentNode, corralNumber, experiment) {
+    var dotPlot;
+    var histogramPlot;
+    createAddButtons(this);
 
     function createDestroyButton(plotCorral) {
         $(parentNode).append("<button class='destroy'>x</button>");
@@ -8,28 +11,50 @@ function PlotCorral(parentNode, corralNumber, dataSet) {
     }
 
 
-    function createAddButton(plotCorral) {
-        $(parentNode).append("<button class='createDotPlot'>+</button>");
-        $(parentNode + ' button.createDotPlot').on('click', function () {
+    function createAddButtons(plotCorral) {
+
+        $(parentNode).append("<div class='createButtons'></div>");
+        var createButtonsSelector = parentNode + ' div.createButtons';
+        $(createButtonsSelector).append("<button class='createDotPlot'>D</button>");
+        $(createButtonsSelector + ' button.createDotPlot').on('click', function () {
             plotCorral.createDotPlot();
+        })
+
+        $(createButtonsSelector).append("<button class='createHistogramPlot'>H</button>");
+        $(createButtonsSelector + ' button.createHistogramPlot').on('click', function () {
+            plotCorral.createHistogramPlot();
         })
     }
 
     this.createDotPlot = function () {
+
         $(parentNode).empty();
 
         createDestroyButton(this);
         $(parentNode).append("<div class='canvas' id='canvas" + corralNumber + "'></div>");
 
         var plotModel = new PlotModel("div#canvas" + corralNumber, "plot" + corralNumber, 300, 300);
-        var plotSpecId = "plotSpec" + corralNumber;
-        var plotSpec = new PlotSpecification(plotSpecId, CH1, CH2, new Range(0, 100), new Range(0, 100));
-        var dotPlot = new DotPlot(plotModel, plotSpec, dataSet);
+        var plotSpec = new PlotSpecification(CH1, CH2, new Range(0, 100), new Range(0, 100));
+        dotPlot = new DotPlot(plotModel, plotSpec, experiment);
         dotPlot.renderPlot();
 
         $(parentNode).append("<div class='controls'></div>");
         createXParameterSelector(plotSpec);
         createYParameterSelector(plotSpec);
+    }
+
+    this.createHistogramPlot = function () {
+        $(parentNode).empty();
+
+        createDestroyButton(this);
+        $(parentNode).append("<div class='canvas' id='canvas" + corralNumber + "'></div>");
+
+        var plotModel = new PlotModel("div#canvas" + corralNumber, "plot" + corralNumber, 300, 300);
+        var plotSpec = new HistogramSpecification(CH1, new Range(0, 100), 10);
+        histogramPlot = new HistogramPlot(plotModel, plotSpec, experiment);
+        histogramPlot.renderPlot();
+        $(parentNode).append("<div class='controls'></div>");
+        createXParameterSelector(plotSpec);
     }
 
     function createXParameterSelector(plotSpec) {
@@ -59,7 +84,16 @@ function PlotCorral(parentNode, corralNumber, dataSet) {
     }
 
     this.destroyPlot = function () {
+        if (dotPlot != undefined) {
+
+            dotPlot.destroy();
+            dotPlot = undefined;
+        }
+        if(histogramPlot != undefined){
+            histogramPlot.destroy();
+            histogramPlot = undefined;
+        }
         $(parentNode).empty();
-        createAddButton(this);
+        createAddButtons(this);
     }
 }

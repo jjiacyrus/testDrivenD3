@@ -11,11 +11,15 @@ button{
     border: none;
 }
 
-.plotCorral button.createDotPlot {
+.plotCorral div.createButtons{
     position: absolute;
     top: 50%;
-    left: 50%;
+    left: 45%;
     transform: translate(0, -50%)
+}
+
+.plotCorral div.createButtons button{
+    margin-right: 5px;
 }
 .plotCorral .canvas{
     padding-top: 20px;

@@ -16,17 +16,18 @@ describe("Dot Plot", function () {
         plotSpec.setYRange(yDomain);
 
         var plotId = "plotterton";
-        var dataset = new Dataset([], [], [], []);
+        var dataset = new Dataset('', [], [], [], []);
         var width = 1000;
         var height = 500;
 
         var plotModel = new PlotModel(parentNode, plotId, width, height);
-        dotPlot = new DotPlot(plotModel, plotSpec, dataset);
+        var experiment = new Experiment(dataset);
+        var dotPlot = new DotPlot(plotModel, plotSpec, experiment);
 
 
         var expectedCanvas = d3.select('body').append('svg');
-        var mockXScale = new MockScale();
-        var mockYScale = new MockScale();
+        var mockXScale = new MockLinearScale();
+        var mockYScale = new MockLinearScale();
         var expectedTranslate = 50;
 
 
@@ -62,13 +63,14 @@ describe("Dot Plot", function () {
         var plotId = "plotterton";
         var dataset = new Dataset([], [], [], []);
         var plotModel = new PlotModel(parentNode, plotId, 1000, 500);
+        var experiment = new Experiment(dataset);
 
-        dotPlot = new DotPlot(plotModel, plotSpec, dataset);
+        var dotPlot = new DotPlot(plotModel, plotSpec, experiment);
 
 
         var canvas = d3.select('body').append('svg');
-        var mockXScale = new MockScale();
-        var mockYScale = new MockScale();
+        var mockXScale = new MockLinearScale();
+        var mockYScale = new MockLinearScale();
         var channel2Data = [124, 12412, 412, 4, 12414];
         var channel4Data = [163224, 34, 413422, 3424, 414];
 
@@ -88,7 +90,7 @@ describe("Dot Plot", function () {
         spyOn(window, 'renderXAxis');
         spyOn(window, 'renderYAxis');
         var formatDataSpy = spyOn(window, 'formatData').and.returnValue(formattedData);
-        var renderDataSpy = spyOn(window, 'renderData');
+        var renderDataSpy = spyOn(window, 'renderScatterPlotData');
 
 
         dotPlot.renderPlot();
@@ -112,16 +114,17 @@ describe("Dot Plot", function () {
         plotSpec.setYParameter(CH1);
 
         var plotId = "plotterton";
-        var dataset = new Dataset([], [], [], []);
+        var dataset = new Dataset('', [], [], [], []);
 
         var plotModel = new PlotModel(parentNode, plotId, 1000, 500);
+        var experiment = new Experiment(dataset);
 
-        dotPlot = new DotPlot(plotModel, plotSpec, dataset);
+        var dotPlot = new DotPlot(plotModel, plotSpec, experiment);
 
 
         var canvas = d3.select('body').append('svg');
-        var mockXScale = new MockScale();
-        var mockYScale = new MockScale();
+        var mockXScale = new MockLinearScale();
+        var mockYScale = new MockLinearScale();
         var channel1Data = [124, 12412, 412, 4, 12414];
         var channel3Data = [163224, 34, 413422, 3424, 414];
 
@@ -141,7 +144,7 @@ describe("Dot Plot", function () {
         spyOn(window, 'renderXAxis');
         spyOn(window, 'renderYAxis');
         var formatDataSpy = spyOn(window, 'formatData').and.returnValue(formattedData);
-        var renderDataSpy = spyOn(window, 'renderData');
+        var renderDataSpy = spyOn(window, 'renderScatterPlotData');
 
 
         dotPlot.renderPlot();
@@ -153,24 +156,30 @@ describe("Dot Plot", function () {
 
     });
 
-    it('adds itself as observer to the plot spec on construction', function () {
+    it('adds itself as observer to the plot spec and experiment on construction', function () {
         var parentNode = "div#target-div";
 
         var plotSpec = new PlotSpecification();
-        var addObserverSpy = spyOn(plotSpec, 'addObserver');
+        var experiment = new Experiment(new Dataset('', [], [], [], []));
+
+        var plotSpecAddObserverSpy = spyOn(plotSpec, 'addObserver');
+        var experimentAddObserverSpy = spyOn(experiment, 'addObserver');
+
         var plotModel = new PlotModel(parentNode, "plotterton", 1000, 500);
 
-        dotPlot = new DotPlot(plotModel, plotSpec, new Dataset([], [], [], []));
-        expect(addObserverSpy).toHaveBeenCalledWith(dotPlot);
+        var dotPlot = new DotPlot(plotModel, plotSpec, experiment);
+        expect(plotSpecAddObserverSpy).toHaveBeenCalledWith(dotPlot);
+        expect(experimentAddObserverSpy).toHaveBeenCalledWith(dotPlot);
     });
 
-    it('removes the previous svg and rerenders when specification changed is called', function () {
+    it('removes the previous svg and re-renders when specification changed is called', function () {
         var parentNode = "div#target-div";
 
         var plotSpec = new PlotSpecification();
         var plotModel = new PlotModel(parentNode, "plotterton", 1000, 500);
+        var experiment = new Experiment(new Dataset('', [], [], [], []));
 
-        dotPlot = new DotPlot(plotModel, plotSpec, new Dataset([], [], [], []));
+        var dotPlot = new DotPlot(plotModel, plotSpec, experiment);
         var renderSpy = spyOn(dotPlot, 'renderPlot');
         var svgSpy = buildD3SpyNode(parentNode, 'svg');
         var selectSpy = spyOn(d3, 'select').and.returnValue(svgSpy);
@@ -181,6 +190,45 @@ describe("Dot Plot", function () {
         expect(renderSpy).toHaveBeenCalled();
 
 
+    });
+    it('removes the previous svg and re-renders when dataset changed is called', function () {
+        var parentNode = "div#target-div";
+
+        var plotSpec = new PlotSpecification();
+        var plotModel = new PlotModel(parentNode, "plotterton", 1000, 500);
+        var experiment = new Experiment(new Dataset('', [], [], [], []));
+
+        var dotPlot = new DotPlot(plotModel, plotSpec, experiment);
+        var renderSpy = spyOn(dotPlot, 'renderPlot');
+        var svgSpy = buildD3SpyNode(parentNode, 'svg');
+        var selectSpy = spyOn(d3, 'select').and.returnValue(svgSpy);
+
+        dotPlot.datasetChanged();
+        expect(selectSpy).toHaveBeenCalledWith('svg#plotterton');
+        expect(svgSpy.remove).toHaveBeenCalled();
+        expect(renderSpy).toHaveBeenCalled();
+    });
+
+    it('removes itself as observer when destroy is called', function () {
+        var parentNode = "div#target-div";
+
+        var plotSpec = new PlotSpecification();
+        var experiment = new Experiment(new Dataset('', [], [], [], []));
+
+        var plotSpecRemoveObserverSpy = spyOn(plotSpec, 'removeObserver');
+        var experimentRemoveObserverSpy = spyOn(experiment, 'removeObserver');
+        var svgSpy = buildD3SpyNode(parentNode, 'svg');
+
+        var plotModel = new PlotModel(parentNode, "plotterton", 1000, 500);
+        var selectSpy = spyOn(d3, 'select').and.returnValue(svgSpy);
+
+        var dotPlot = new DotPlot(plotModel, plotSpec, experiment);
+        dotPlot.destroy();
+
+        expect(selectSpy).toHaveBeenCalledWith('svg#plotterton');
+        expect(svgSpy.remove).toHaveBeenCalled();
+        expect(plotSpecRemoveObserverSpy).toHaveBeenCalledWith(dotPlot);
+        expect(experimentRemoveObserverSpy).toHaveBeenCalledWith(dotPlot);
     });
 
 

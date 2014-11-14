@@ -1,15 +1,11 @@
-/**
- * Created by Cyrus on 11/7/14.
- */
+
 describe('Plot specification', function () {
 
     it('should give you properties from its constructor', function () {
         var expectedXRange = new Range(251, 1231);
         var expectedYRange = new Range(3523, 23555);
-        var plotSpecId = 'plotId';
-        var plotSpec = new PlotSpecification(plotSpecId, CH1, CH3, expectedXRange, expectedYRange);
+        var plotSpec = new PlotSpecification(CH1, CH3, expectedXRange, expectedYRange);
 
-        expect(plotSpec.getId()).toEqual(plotSpecId);
         expect(plotSpec.getXParameter()).toEqual(CH1);
         expect(plotSpec.getYParameter()).toEqual(CH3);
         expect(plotSpec.getXRange()).toEqual(expectedXRange);
@@ -19,7 +15,7 @@ describe('Plot specification', function () {
     it('should allow a user to change the ranges and parameters', function () {
         var expectedXRange = new Range(251, 1231);
         var expectedYRange = new Range(3523, 23555);
-        var plotSpec = new PlotSpecification('Id', CH1, CH3, expectedXRange, expectedYRange);
+        var plotSpec = new PlotSpecification(CH1, CH3, expectedXRange, expectedYRange);
 
         expect(plotSpec.getXParameter()).toEqual(CH1);
         expect(plotSpec.getYParameter()).toEqual(CH3);
@@ -41,25 +37,13 @@ describe('Plot specification', function () {
         expect(plotSpec.getYRange()).toEqual(newYRange);
     });
 
-    function MockPlotSpecObserver() {
-
-        this.numberOfNotifications = 0;
-
-        this.specificationChanged= function () {
-            this.numberOfNotifications++;
-            return this;
-        }
-        return this;
-    }
-
-
     it('should notify all observers of specification changed when any of the parameters are set', function () {
         var expectedXRange = new Range(251, 1231);
         var expectedYRange = new Range(3523, 23555);
-        var plotSpec = new PlotSpecification('Id', CH1, CH3, expectedXRange, expectedYRange);
+        var plotSpec = new PlotSpecification(CH1, CH3, expectedXRange, expectedYRange);
 
-        var observer1 = new MockPlotSpecObserver();
-        var observer2 = new MockPlotSpecObserver();
+        var observer1 = new MockSpecificationObserver();
+        var observer2 = new MockSpecificationObserver();
         plotSpec.addObserver(observer1);
         plotSpec.addObserver(observer2);
 
@@ -90,10 +74,10 @@ describe('Plot specification', function () {
     it('should not notify any obsevers that have been removed', function () {
         var expectedXRange = new Range(251, 1231);
         var expectedYRange = new Range(3523, 23555);
-        var plotSpec = new PlotSpecification('Id', CH1, CH3, expectedXRange, expectedYRange);
+        var plotSpec = new PlotSpecification(CH1, CH3, expectedXRange, expectedYRange);
 
-        var observer1 = new MockPlotSpecObserver();
-        var observer2 = new MockPlotSpecObserver();
+        var observer1 = new MockSpecificationObserver();
+        var observer2 = new MockSpecificationObserver();
         plotSpec.addObserver(observer1);
         plotSpec.addObserver(observer2);
         plotSpec.removeObserver(observer1);

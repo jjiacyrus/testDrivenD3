@@ -1,12 +1,12 @@
 /**
  * Created by Cyrus on 11/7/14.
  */
-function PlotSpecification(plotSpecId, xParameter, yParameter, xRange, yRange) {
-    this.xParameter = xParameter;
-    this.yParameter = yParameter;
-    this.xRange = xRange;
-    this.yRange = yRange;
-    this.observers = [];
+function PlotSpecification(xParameter, yParameter, xRange, yRange) {
+    var xParameter = xParameter;
+    var yParameter = yParameter;
+    var xRange = xRange;
+    var yRange = yRange;
+    var observers = [];
     function notifyObserversOfChange(observers) {
 
         if (observers.length > 0) {
@@ -18,50 +18,48 @@ function PlotSpecification(plotSpecId, xParameter, yParameter, xRange, yRange) {
     }
 
     this.addObserver = function (observer) {
-        this.observers.push(observer);
+        observers.push(observer);
     }
     this.removeObserver = function(observer){
-        var index = this.observers.indexOf(observer);
+        var index = observers.indexOf(observer);
         if (index > -1) {
-            this.observers.splice(index, 1);
+            observers.splice(index, 1);
         }
     }
 
-    this.getId = function () {
-        return plotSpecId;
-    }
+
     this.getXParameter = function () {
-        return this.xParameter;
+        return xParameter;
     }
 
     this.getYParameter = function () {
-        return this.yParameter;
+        return yParameter;
     }
 
     this.getXRange = function () {
-        return this.xRange;
+        return xRange;
     }
 
     this.getYRange = function () {
-        return this.yRange;
+        return yRange;
     }
 
-    this.setXRange = function (xRange) {
-        this.xRange = xRange;
-        notifyObserversOfChange(this.observers);
+    this.setXRange = function (range) {
+        xRange = range;
+        notifyObserversOfChange(observers);
     }
-    this.setYRange = function (yRange) {
-        this.yRange = yRange;
-        notifyObserversOfChange(this.observers);
+    this.setYRange = function (range) {
+        yRange = range;
+        notifyObserversOfChange(observers);
     }
-    this.setXParameter = function (xParameter) {
-        this.xParameter = xParameter;
-        notifyObserversOfChange(this.observers);
+    this.setXParameter = function (parameter) {
+        xParameter = parameter;
+        notifyObserversOfChange(observers);
     }
 
-    this.setYParameter = function (yParameter) {
-        this.yParameter = yParameter;
-        notifyObserversOfChange(this.observers);
+    this.setYParameter = function (parameter) {
+        yParameter = parameter;
+        notifyObserversOfChange(observers);
     }
 
 }

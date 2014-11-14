@@ -1,26 +1,40 @@
 function MockLinearScale() {
-    this.minRange = 0;
-    this.maxRange = 0;
-    this.minDomain = 0;
-    this.maxDomain = 0;
-    this.range = function (rangeArray) {
-        this.minRange = rangeArray[0];
-        this.maxRange = rangeArray[1];
-        return this;
+    scale.dataToScaledData ={};
+    scale.minRange = 0;
+    scale.maxRange = 0;
+    scale.minDomain = 0;
+    scale.maxDomain = 0;
+    scale.ticksToReturn = 0;
+    scale.range = function (rangeArray) {
+        scale.minRange = rangeArray[0];
+        scale.maxRange = rangeArray[1];
+        return scale;
     }
-    this.domain = function (domainArray) {
-        this.minDomain = domainArray[0];
-        this.maxDomain = domainArray[1];
-        return this;
+    scale.domain = function (domainArray) {
+        scale.minDomain = domainArray[0];
+        scale.maxDomain = domainArray[1];
+        return scale;
     }
-
-}
-function MockScale(dataToScaledData){
-
+    scale.ticks = function(numberOfTicks){
+        scale.numberOfTicksPassedIn = numberOfTicks;
+        return scale.ticksToReturn;
+    }
     function scale(x) {
-        return dataToScaledData[x];
+        return scale.dataToScaledData[x];
     }
     return scale;
+}
+
+function MockHistogram(binnedData){
+    function histogram(data){
+        histogram.dataBinned = data;
+        return binnedData;
+    }
+    histogram.bins = function(numberOfBins){
+        histogram.numberOfBins = numberOfBins;
+        return histogram;
+    }
+    return histogram;
 }
 
 function MockAxis (){
