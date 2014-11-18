@@ -19,4 +19,14 @@ describe('Range', function () {
         var range = new Range(100,400);
         expect(range.span).toEqual(300);
     });
+
+    it('should be able to determine if a value is contained', function(){
+        var range = new Range(10, 50);
+        expect(range.contains(20)).toBe(true);
+        expect(range.contains(200)).toBe(false);
+        expect(range.contains(9)).toBe(false);
+        expect(range.contains(51)).toBe(false);
+        expect(range.contains(10)).toBe(true);
+        expect(range.contains(50)).toBe(true);
+    });
 });

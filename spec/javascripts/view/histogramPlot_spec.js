@@ -38,8 +38,8 @@ describe("Histogram Plot", function () {
         var renderCanvasSpy = spyOn(window, 'renderCanvas').and.returnValue(expectedCanvas);
 
 
-        var buildXScaleSpy = spyOn(window, 'buildXScale').and.returnValue(mockXScale);
-        var buildYScaleSpy = spyOn(window, 'buildYScale').and.returnValue(mockYScale);
+        var buildXScaleSpy = spyOn(window, 'buildLinearXScale').and.returnValue(mockXScale);
+        var buildYScaleSpy = spyOn(window, 'buildLinearYScale').and.returnValue(mockYScale);
 
         var renderXAxisSpy = spyOn(window, 'renderXAxis');
         var renderYAxisSpy = spyOn(window, 'renderYAxis');
@@ -81,8 +81,8 @@ describe("Histogram Plot", function () {
 
         spyOn(window, 'renderCanvas').and.returnValue(canvas);
 
-        spyOn(window, 'buildXScale').and.returnValue(mockXScale);
-        spyOn(window, 'buildYScale').and.returnValue(mockYScale);
+        spyOn(window, 'buildLinearXScale').and.returnValue(mockXScale);
+        spyOn(window, 'buildLinearYScale').and.returnValue(mockYScale);
         var binnedData = [
             {x: 3523, y: 3423}
         ];

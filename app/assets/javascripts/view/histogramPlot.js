@@ -10,12 +10,12 @@ function HistogramPlot(plotModel, histogramSpec, experiment) {
         var yTopPadding = 30;
         var yHeight = height - yTopPadding;
 
-        var xScale = buildXScale(new Range(0, width - xRightPadding), histogramSpec.getXRange());
+        var xScale = buildLinearXScale(new Range(0, width - xRightPadding), histogramSpec.getXRange());
 
         var channelData = getChannelData(experiment.getCurrentDataset(), histogramSpec.getXParameter());
         var binnedData = binData(channelData, xScale, histogramSpec.getNumberOfBins());
 
-        var yScale = buildYScale(new Range(yBottomPadding, yHeight), new Range(0, Math.floor(d3.max(binnedData, function (d) {
+        var yScale = buildLinearYScale(new Range(yBottomPadding, yHeight), new Range(0, Math.floor(d3.max(binnedData, function (d) {
             return d.y;
         }) * 1.1)));
 

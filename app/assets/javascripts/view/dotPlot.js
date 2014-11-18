@@ -10,8 +10,8 @@ function DotPlot(plotModel, plotSpec, experiment) {
         var yTopPadding = 30;
         var yHeight = height - yTopPadding;
 
-        var xScale = buildXScale(new Range(0, width - xRightPadding), plotSpec.getXRange());
-        var yScale = buildYScale(new Range(yBottomPadding, yHeight), plotSpec.getYRange());
+        var xScale = buildLinearXScale(new Range(0, width - xRightPadding), plotSpec.getXRange());
+        var yScale = buildLinearYScale(new Range(yBottomPadding, yHeight), plotSpec.getYRange());
 
         var xAxisOffset = 50;
         var canvas = renderCanvas(plotModel.getParentNode(), plotModel.getPlotId(), width, height);
@@ -56,8 +56,7 @@ function DotPlot(plotModel, plotSpec, experiment) {
     function renderPlotData(canvas, dataSet, plotSpec, xScale, yScale, xAxisOffset) {
         var xChannelData = getChannelData(dataSet, plotSpec.getXParameter());
         var yChannelData = getChannelData(dataSet, plotSpec.getYParameter());
-
-        var formattedData = formatData(xChannelData, yChannelData, xScale, yScale);
+        var formattedData = formatData(xChannelData, yChannelData, xScale, yScale, plotSpec.getXRange(), plotSpec.getYRange());
         renderScatterPlotData(canvas, formattedData, xAxisOffset, 0);
     }
 

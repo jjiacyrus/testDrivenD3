@@ -1,15 +1,17 @@
-
-function formatData(xChannel, yChannel, xScale, yScale) {
+function formatData(xChannel, yChannel, xScale, yScale, xDomain, yDomain) {
     formattedData = [];
     for (i = 0; i < xChannel.length; i++) {
-        formattedData.push([xScale(xChannel[i]), yScale(yChannel[i])]);
+        if (xDomain.contains(xChannel[i]) && yDomain.contains(yChannel[i])) {
+            formattedData.push([xScale(xChannel[i]), yScale(yChannel[i])]);
+        }
     }
     return formattedData;
 
 }
 
 function renderScatterPlotData(canvas, data, xAxisOffset, yAxisOffset) {
-    var dataGroup = canvas.append('g').attr('transform', 'translate('+ xAxisOffset +', '+yAxisOffset+')');
+    var dataGroup = canvas.append('g').attr('transform', 'translate(' + xAxisOffset + ', ' + yAxisOffset + ')');
+
     dataGroup.selectAll(".dot")
         .data(data)
         .enter().append("circle")

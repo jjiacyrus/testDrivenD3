@@ -2,6 +2,15 @@ afterEach(function () {
     d3.selectAll('svg').remove();
 });
 
+beforeEach(function(){
+    function rangeEqualityChecker(expected,actual){
+
+        if(expected instanceof Range && actual instanceof Range) {
+            return expected.max == actual.max && expected.min == actual.min
+        };
+    }
+    jasmine.addCustomEqualityTester(rangeEqualityChecker);
+});
 describe("Dot Plot", function () {
     it("renders a canvas, and axis in the a div", function () {
 
@@ -33,14 +42,19 @@ describe("Dot Plot", function () {
 
         var renderCanvasSpy = spyOn(window, 'renderCanvas').and.returnValue(expectedCanvas);
 
-        var buildXScaleSpy = spyOn(window, 'buildXScale').and.returnValue(mockXScale);
-        var buildYScaleSpy = spyOn(window, 'buildYScale').and.returnValue(mockYScale);
+        var buildXScaleSpy = spyOn(window, 'buildLinearXScale').and.returnValue(mockXScale);
+        var buildYScaleSpy = spyOn(window, 'buildLinearYScale').and.returnValue(mockYScale);
 
         var renderXAxisSpy = spyOn(window, 'renderXAxis');
         var renderYAxisSpy = spyOn(window, 'renderYAxis');
 
         dotPlot.renderPlot();
+
+
+        expect(new Range(0,10)).toEqual(new Range(0,10));
+
         expect(renderCanvasSpy).toHaveBeenCalledWith(parentNode, plotId, 1000, 500);
+
         expect(buildXScaleSpy).toHaveBeenCalledWith(new Range(0, 935), xDomain);
         expect(buildYScaleSpy).toHaveBeenCalledWith(new Range(10, 470), yDomain);
 
@@ -60,6 +74,11 @@ describe("Dot Plot", function () {
         plotSpec.setXParameter(CH2);
         plotSpec.setYParameter(CH4);
 
+        var xDomain = new Range(12, 223);
+        var yDomain = new Range(46212, 223);
+        plotSpec.setXRange(xDomain);
+        plotSpec.setYRange(yDomain);
+
         var plotId = "plotterton";
         var dataset = new Dataset([], [], [], []);
         var plotModel = new PlotModel(parentNode, plotId, 1000, 500);
@@ -77,8 +96,8 @@ describe("Dot Plot", function () {
 
         spyOn(window, 'renderCanvas').and.returnValue(canvas);
 
-        spyOn(window, 'buildXScale').and.returnValue(mockXScale);
-        spyOn(window, 'buildYScale').and.returnValue(mockYScale);
+        spyOn(window, 'buildLinearXScale').and.returnValue(mockXScale);
+        spyOn(window, 'buildLinearYScale').and.returnValue(mockYScale);
         var getChannel2Spy = spyOn(dataset, 'getChannel2').and.returnValue(channel2Data);
         var getChannel4Spy = spyOn(dataset, 'getChannel4').and.returnValue(channel4Data);
         var formattedData = [
@@ -97,7 +116,7 @@ describe("Dot Plot", function () {
 
         expect(getChannel2Spy).toHaveBeenCalled();
         expect(getChannel4Spy).toHaveBeenCalled();
-        expect(formatDataSpy).toHaveBeenCalledWith(channel2Data, channel4Data, mockXScale, mockYScale);
+        expect(formatDataSpy).toHaveBeenCalledWith(channel2Data, channel4Data, mockXScale, mockYScale, xDomain, yDomain);
         expect(renderDataSpy).toHaveBeenCalledWith(canvas, formattedData, 50, 0);
 
     });
@@ -108,7 +127,10 @@ describe("Dot Plot", function () {
         affix(parentNode);
 
         var plotSpec = new PlotSpecification();
-
+        var xRange = new Range(214, 5225);
+        var yRange = new Range(114,225);
+        plotSpec.setXRange(xRange);
+        plotSpec.setYRange(yRange);
 
         plotSpec.setXParameter(CH3);
         plotSpec.setYParameter(CH1);
@@ -131,8 +153,8 @@ describe("Dot Plot", function () {
 
         spyOn(window, 'renderCanvas').and.returnValue(canvas);
 
-        spyOn(window, 'buildXScale').and.returnValue(mockXScale);
-        spyOn(window, 'buildYScale').and.returnValue(mockYScale);
+        spyOn(window, 'buildLinearXScale').and.returnValue(mockXScale);
+        spyOn(window, 'buildLinearYScale').and.returnValue(mockYScale);
         var getChannel1Spy = spyOn(dataset, 'getChannel1').and.returnValue(channel1Data);
         var getChannel3Spy = spyOn(dataset, 'getChannel3').and.returnValue(channel3Data);
         var formattedData = [
@@ -151,7 +173,7 @@ describe("Dot Plot", function () {
 
         expect(getChannel1Spy).toHaveBeenCalled();
         expect(getChannel3Spy).toHaveBeenCalled();
-        expect(formatDataSpy).toHaveBeenCalledWith(channel3Data, channel1Data, mockXScale, mockYScale);
+        expect(formatDataSpy).toHaveBeenCalledWith(channel3Data, channel1Data, mockXScale, mockYScale, xRange, yRange);
         expect(renderDataSpy).toHaveBeenCalledWith(canvas, formattedData, 50, 0);
 
     });

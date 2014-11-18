@@ -1,4 +1,4 @@
-function buildXScale(range, domain) {
+function buildLinearXScale(range, domain) {
     var scale = d3.scale;
 
     var linear = scale.linear();
@@ -6,7 +6,7 @@ function buildXScale(range, domain) {
     linear.domain([domain.min, domain.max]);
     return linear;
 }
-function buildYScale(range, domain){
+function buildLinearYScale(range, domain){
     var scale = d3.scale;
     var linear = scale.linear();
     linear.range([range.min, range.max]);

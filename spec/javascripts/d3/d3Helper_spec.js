@@ -9,7 +9,7 @@ describe('d3 Helpers', function () {
 
         var theRange = new Range(10, 500);
         var theDomain = new Range(50, 300);
-        scale = buildXScale(theRange, theDomain);
+        scale = buildLinearXScale(theRange, theDomain);
         expect(scale).not.toBeUndefined();
         expect(scale).toEqual(scaleToReturn);
 
@@ -31,7 +31,7 @@ describe('d3 Helpers', function () {
 
         var theRange = new Range(10, 500);
         var theDomain = new Range(50, 300);
-        scale = buildYScale(theRange, theDomain);
+        scale = buildLinearYScale(theRange, theDomain);
         expect(scale).not.toBeUndefined();
         expect(scale).toEqual(scaleToReturn);
 

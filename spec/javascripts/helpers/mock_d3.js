@@ -4,6 +4,7 @@ function MockLinearScale() {
     scale.maxRange = 0;
     scale.minDomain = 0;
     scale.maxDomain = 0;
+    scale.clampSet = false;
     scale.ticksToReturn = 0;
     scale.range = function (rangeArray) {
         scale.minRange = rangeArray[0];
@@ -19,6 +20,11 @@ function MockLinearScale() {
         scale.numberOfTicksPassedIn = numberOfTicks;
         return scale.ticksToReturn;
     }
+    scale.clamp = function(clamp){
+        scale.clampSet = clamp;
+        return scale;
+    }
+
     function scale(x) {
         return scale.dataToScaledData[x];
     }

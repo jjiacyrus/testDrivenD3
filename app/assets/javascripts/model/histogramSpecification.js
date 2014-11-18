@@ -15,7 +15,6 @@ function HistogramSpecification(xParameter, xRange, numberOfBins) {
         }
     }
 
-
     this.getXParameter = function () {
         return xParameter;
     }
@@ -24,7 +23,6 @@ function HistogramSpecification(xParameter, xRange, numberOfBins) {
     this.getXRange = function () {
         return xRange;
     }
-
 
     this.setXRange = function (range) {
         xRange = range;
@@ -36,13 +34,15 @@ function HistogramSpecification(xParameter, xRange, numberOfBins) {
         notifyObserversOfChange(observers);
     }
 
-    this.getNumberOfBins = function(){
+    this.getNumberOfBins = function () {
         return numberOfBins;
     }
-    this.setNumberOfBins = function(bins){
+
+    this.setNumberOfBins = function (bins) {
         numberOfBins = bins;
         notifyObserversOfChange(observers);
     }
+
     function notifyObserversOfChange(observers) {
 
         if (observers.length > 0) {

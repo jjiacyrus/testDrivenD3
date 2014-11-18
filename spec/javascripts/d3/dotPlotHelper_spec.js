@@ -54,13 +54,41 @@ describe('Dot Plot Helpers', function () {
 
         var mockYScale = MockLinearScale();
         mockYScale.dataToScaledData = scaledYData;
-        var formattedData = formatData(xData, yData, mockXScale, mockYScale);
+        var formattedData = formatData(xData, yData, mockXScale, mockYScale, new Range(0, 500), new Range(0,500));
 
         expect(formattedData).toEqual([
             [35.2, 1200],
             [23.4, 1540],
             [2.2, 520],
             [4.1, 490]
+        ]);
+    });
+
+    it('should filter for data that is outside the domain and not scale it', function () {
+        xData = [10, 20, 30, 50];
+        yData = [60, 70, 100, 40];
+        scaledXData = {};
+        scaledXData[10] = 35.2;
+        scaledXData[20] = 23.4;
+
+
+        var mockXScale = MockLinearScale();
+        mockXScale.dataToScaledData = scaledXData;
+
+
+        scaledYData = {};
+        scaledYData[60] = 1200;
+        scaledYData[70] = 1540;
+
+        var mockYScale = MockLinearScale();
+        mockYScale.dataToScaledData = scaledYData;
+        var xRange = new Range(10, 40);
+        var yRange = new Range(50, 90);
+        var formattedData = formatData(xData, yData, mockXScale, mockYScale, xRange, yRange);
+
+        expect(formattedData).toEqual([
+            [35.2, 1200],
+            [23.4, 1540],
         ]);
     });
 });

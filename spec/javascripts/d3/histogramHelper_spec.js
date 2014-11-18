@@ -5,8 +5,6 @@ describe("Histogram Helper", function () {
         var scaledTicks = 523;
         xScale.ticksToReturn = scaledTicks;
 
-        var yScale = new MockLinearScale();
-
         var numberOfBins = 35;
         var binnedData = [
             {x: 24, y: 32, dx: 35},
@@ -17,8 +15,6 @@ describe("Histogram Helper", function () {
         d3.layout.histogram = function () {
             return  histogram;
         }
-
-
 
         var binnedData = binData(data, xScale, numberOfBins);
         expect(binnedData).toEqual(binnedData);
