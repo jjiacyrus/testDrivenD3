@@ -1,4 +1,8 @@
-function buildLinearXScale(range, domain) {
+function D3Helper() {
+
+}
+
+D3Helper.buildLinearXScale = function (range, domain) {
     var scale = d3.scale;
 
     var linear = scale.linear();
@@ -6,21 +10,21 @@ function buildLinearXScale(range, domain) {
     linear.domain([domain.min, domain.max]);
     return linear;
 }
-function buildLinearYScale(range, domain){
+D3Helper.buildLinearYScale = function (range, domain) {
     var scale = d3.scale;
     var linear = scale.linear();
     linear.range([range.min, range.max]);
     linear.domain([domain.max, domain.min]);
     return linear;
 }
-function renderCanvas(parent, plotId, width, height) {
+D3Helper.renderCanvas = function (parent, plotId, width, height) {
     var canvas = d3.select(parent).append('svg').attr('id', plotId)
         .attr('height', height)
         .attr('width', width);
     return canvas;
 }
 
-function buildAxis(canvas, scale, xTranslate, yTranslate, className, orientation) {
+buildAxis = function (canvas, scale, xTranslate, yTranslate, className, orientation) {
     var axisGroup = canvas.append("g");
     axisGroup
         .attr("class", className)
@@ -29,11 +33,11 @@ function buildAxis(canvas, scale, xTranslate, yTranslate, className, orientation
     axisGroup.call(axis);
 }
 
-function renderXAxis(canvas, xScale, xTranslate, yTranslate) {
+D3Helper.renderXAxis = function(canvas, xScale, xTranslate, yTranslate) {
 
     buildAxis(canvas, xScale, xTranslate, yTranslate, 'x axis', 'bottom');
 }
 
-function renderYAxis(canvas, yScale, xTranslate, yTranslate) {
+D3Helper.renderYAxis= function(canvas, yScale, xTranslate, yTranslate) {
     buildAxis(canvas, yScale, xTranslate, yTranslate, 'y axis', 'left');
 }

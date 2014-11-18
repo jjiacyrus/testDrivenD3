@@ -40,13 +40,13 @@ describe("Dot Plot", function () {
         var expectedTranslate = 50;
 
 
-        var renderCanvasSpy = spyOn(window, 'renderCanvas').and.returnValue(expectedCanvas);
+        var renderCanvasSpy = spyOn(D3Helper, 'renderCanvas').and.returnValue(expectedCanvas);
 
-        var buildXScaleSpy = spyOn(window, 'buildLinearXScale').and.returnValue(mockXScale);
-        var buildYScaleSpy = spyOn(window, 'buildLinearYScale').and.returnValue(mockYScale);
+        var buildXScaleSpy = spyOn(D3Helper, 'buildLinearXScale').and.returnValue(mockXScale);
+        var buildYScaleSpy = spyOn(D3Helper, 'buildLinearYScale').and.returnValue(mockYScale);
 
-        var renderXAxisSpy = spyOn(window, 'renderXAxis');
-        var renderYAxisSpy = spyOn(window, 'renderYAxis');
+        var renderXAxisSpy = spyOn(D3Helper, 'renderXAxis');
+        var renderYAxisSpy = spyOn(D3Helper, 'renderYAxis');
 
         dotPlot.renderPlot();
 
@@ -94,10 +94,10 @@ describe("Dot Plot", function () {
         var channel4Data = [163224, 34, 413422, 3424, 414];
 
 
-        spyOn(window, 'renderCanvas').and.returnValue(canvas);
+        spyOn(D3Helper, 'renderCanvas').and.returnValue(canvas);
 
-        spyOn(window, 'buildLinearXScale').and.returnValue(mockXScale);
-        spyOn(window, 'buildLinearYScale').and.returnValue(mockYScale);
+        spyOn(D3Helper, 'buildLinearXScale').and.returnValue(mockXScale);
+        spyOn(D3Helper, 'buildLinearYScale').and.returnValue(mockYScale);
         var getChannel2Spy = spyOn(dataset, 'getChannel2').and.returnValue(channel2Data);
         var getChannel4Spy = spyOn(dataset, 'getChannel4').and.returnValue(channel4Data);
         var formattedData = [
@@ -106,10 +106,10 @@ describe("Dot Plot", function () {
             [3532, 43423],
             [53253, 23423]
         ];
-        spyOn(window, 'renderXAxis');
-        spyOn(window, 'renderYAxis');
-        var formatDataSpy = spyOn(window, 'formatData').and.returnValue(formattedData);
-        var renderDataSpy = spyOn(window, 'renderScatterPlotData');
+        spyOn(D3Helper, 'renderXAxis');
+        spyOn(D3Helper, 'renderYAxis');
+        var formatDataSpy = spyOn(DotPlotHelper, 'formatData').and.returnValue(formattedData);
+        var renderDataSpy = spyOn(DotPlotHelper, 'renderScatterPlotData');
 
 
         dotPlot.renderPlot();
@@ -151,10 +151,10 @@ describe("Dot Plot", function () {
         var channel3Data = [163224, 34, 413422, 3424, 414];
 
 
-        spyOn(window, 'renderCanvas').and.returnValue(canvas);
+        spyOn(D3Helper, 'renderCanvas').and.returnValue(canvas);
 
-        spyOn(window, 'buildLinearXScale').and.returnValue(mockXScale);
-        spyOn(window, 'buildLinearYScale').and.returnValue(mockYScale);
+        spyOn(D3Helper, 'buildLinearXScale').and.returnValue(mockXScale);
+        spyOn(D3Helper, 'buildLinearYScale').and.returnValue(mockYScale);
         var getChannel1Spy = spyOn(dataset, 'getChannel1').and.returnValue(channel1Data);
         var getChannel3Spy = spyOn(dataset, 'getChannel3').and.returnValue(channel3Data);
         var formattedData = [
@@ -163,10 +163,10 @@ describe("Dot Plot", function () {
             [3532, 43423],
             [53253, 23423]
         ];
-        spyOn(window, 'renderXAxis');
-        spyOn(window, 'renderYAxis');
-        var formatDataSpy = spyOn(window, 'formatData').and.returnValue(formattedData);
-        var renderDataSpy = spyOn(window, 'renderScatterPlotData');
+        spyOn(D3Helper, 'renderXAxis');
+        spyOn(D3Helper, 'renderYAxis');
+        var formatDataSpy = spyOn(DotPlotHelper, 'formatData').and.returnValue(formattedData);
+        var renderDataSpy = spyOn(DotPlotHelper, 'renderScatterPlotData');
 
 
         dotPlot.renderPlot();

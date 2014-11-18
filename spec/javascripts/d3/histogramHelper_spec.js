@@ -16,7 +16,7 @@ describe("Histogram Helper", function () {
             return  histogram;
         }
 
-        var binnedData = binData(data, xScale, numberOfBins);
+        var binnedData = HistogramHelper.binData(data, xScale, numberOfBins);
         expect(binnedData).toEqual(binnedData);
         expect(data).toEqual(histogram.dataBinned);
         expect(scaledTicks).toEqual(histogram.numberOfBins);
@@ -49,7 +49,7 @@ describe("Histogram Helper", function () {
             {x: 120, y: 12, width: 250}
         ];
 
-        var scaledData =scaleBinnedData(binnedData, xScale, yScale);
+        var scaledData = HistogramHelper.scaleBinnedData(binnedData, xScale, yScale);
         expect(scaledData).toEqual(expectedData);
 
     });
@@ -65,7 +65,7 @@ describe("Histogram Helper", function () {
             {x: 6, y: 42, width: 42}
         ];
         var graphingAreaHeight = 500;
-        renderHistogramData(canvas, data, 25, 50, graphingAreaHeight);
+        HistogramHelper.renderHistogramData(canvas, data, 25, 50, graphingAreaHeight);
 
         var dataGroup = canvas.select('g.dataGroup');
         expect(dataGroup.empty()).toBeFalsy();

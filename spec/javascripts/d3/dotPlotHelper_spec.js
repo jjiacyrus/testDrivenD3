@@ -9,7 +9,7 @@ describe('Dot Plot Helpers', function () {
             [53, 90],
             [20, 20]
         ];
-        renderScatterPlotData(canvas, data, 25, 50);
+        DotPlotHelper.renderScatterPlotData(canvas, data, 25, 50);
 
         var dataGroup = canvas.select('g');
         expect(dataGroup.empty()).toBeFalsy();
@@ -54,7 +54,7 @@ describe('Dot Plot Helpers', function () {
 
         var mockYScale = MockLinearScale();
         mockYScale.dataToScaledData = scaledYData;
-        var formattedData = formatData(xData, yData, mockXScale, mockYScale, new Range(0, 500), new Range(0,500));
+        var formattedData = DotPlotHelper.formatData(xData, yData, mockXScale, mockYScale, new Range(0, 500), new Range(0,500));
 
         expect(formattedData).toEqual([
             [35.2, 1200],
@@ -84,7 +84,7 @@ describe('Dot Plot Helpers', function () {
         mockYScale.dataToScaledData = scaledYData;
         var xRange = new Range(10, 40);
         var yRange = new Range(50, 90);
-        var formattedData = formatData(xData, yData, mockXScale, mockYScale, xRange, yRange);
+        var formattedData = DotPlotHelper.formatData(xData, yData, mockXScale, mockYScale, xRange, yRange);
 
         expect(formattedData).toEqual([
             [35.2, 1200],

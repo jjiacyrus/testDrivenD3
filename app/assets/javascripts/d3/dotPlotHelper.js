@@ -1,4 +1,7 @@
-function formatData(xChannel, yChannel, xScale, yScale, xDomain, yDomain) {
+function DotPlotHelper(){
+
+}
+DotPlotHelper.formatData = function(xChannel, yChannel, xScale, yScale, xDomain, yDomain) {
     formattedData = [];
     for (i = 0; i < xChannel.length; i++) {
         if (xDomain.contains(xChannel[i]) && yDomain.contains(yChannel[i])) {
@@ -9,7 +12,7 @@ function formatData(xChannel, yChannel, xScale, yScale, xDomain, yDomain) {
 
 }
 
-function renderScatterPlotData(canvas, data, xAxisOffset, yAxisOffset) {
+DotPlotHelper.renderScatterPlotData = function(canvas, data, xAxisOffset, yAxisOffset) {
     var dataGroup = canvas.append('g').attr('transform', 'translate(' + xAxisOffset + ', ' + yAxisOffset + ')');
 
     dataGroup.selectAll(".dot")

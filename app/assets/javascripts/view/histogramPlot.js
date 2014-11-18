@@ -10,20 +10,20 @@ function HistogramPlot(plotModel, histogramSpec, experiment) {
         var yTopPadding = 30;
         var yHeight = height - yTopPadding;
 
-        var xScale = buildLinearXScale(new Range(0, width - xRightPadding), histogramSpec.getXRange());
+        var xScale = D3Helper.buildLinearXScale(new Range(0, width - xRightPadding), histogramSpec.getXRange());
 
         var channelData = getChannelData(experiment.getCurrentDataset(), histogramSpec.getXParameter());
-        var binnedData = binData(channelData, xScale, histogramSpec.getNumberOfBins());
+        var binnedData = HistogramHelper.binData(channelData, xScale, histogramSpec.getNumberOfBins());
 
-        var yScale = buildLinearYScale(new Range(yBottomPadding, yHeight), new Range(0, Math.floor(d3.max(binnedData, function (d) {
+        var yScale = D3Helper.buildLinearYScale(new Range(yBottomPadding, yHeight), new Range(0, Math.floor(d3.max(binnedData, function (d) {
             return d.y;
         }) * 1.1)));
 
         var xAxisOffset = 50;
-        var canvas = renderCanvas(plotModel.getParentNode(), plotModel.getPlotId(), width, height);
+        var canvas = D3Helper.renderCanvas(plotModel.getParentNode(), plotModel.getPlotId(), width, height);
         renderAxes(canvas, xScale, xAxisOffset, yHeight, yScale);
-        var scaledBinnedData = scaleBinnedData(binnedData, xScale, yScale);
-        renderHistogramData(canvas, scaledBinnedData, xAxisOffset, 0, yHeight);
+        var scaledBinnedData = HistogramHelper.scaleBinnedData(binnedData, xScale, yScale);
+        HistogramHelper.renderHistogramData(canvas, scaledBinnedData, xAxisOffset, 0, yHeight);
     }
 
     this.specificationChanged = function () {
@@ -47,8 +47,8 @@ function HistogramPlot(plotModel, histogramSpec, experiment) {
     }
 
     function renderAxes(canvas, xScale, xAxisOffset, yHeight, yScale) {
-        renderXAxis(canvas, xScale, xAxisOffset, yHeight);
-        renderYAxis(canvas, yScale, xAxisOffset, 0);
+        D3Helper.renderXAxis(canvas, xScale, xAxisOffset, yHeight);
+        D3Helper.renderYAxis(canvas, yScale, xAxisOffset, 0);
     }
 
     function getChannelData(dataSet, parameter) {

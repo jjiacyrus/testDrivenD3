@@ -33,16 +33,16 @@ describe("Histogram Plot", function () {
             {x: 3523, y: 100},
             {x: 3523, y: 50},
         ];
-        var binSpy = spyOn(window, 'binData').and.returnValue(binnedData);
+        var binSpy = spyOn(HistogramHelper, 'binData').and.returnValue(binnedData);
 
-        var renderCanvasSpy = spyOn(window, 'renderCanvas').and.returnValue(expectedCanvas);
+        var renderCanvasSpy = spyOn(D3Helper, 'renderCanvas').and.returnValue(expectedCanvas);
 
 
-        var buildXScaleSpy = spyOn(window, 'buildLinearXScale').and.returnValue(mockXScale);
-        var buildYScaleSpy = spyOn(window, 'buildLinearYScale').and.returnValue(mockYScale);
+        var buildXScaleSpy = spyOn(D3Helper, 'buildLinearXScale').and.returnValue(mockXScale);
+        var buildYScaleSpy = spyOn(D3Helper, 'buildLinearYScale').and.returnValue(mockYScale);
 
-        var renderXAxisSpy = spyOn(window, 'renderXAxis');
-        var renderYAxisSpy = spyOn(window, 'renderYAxis');
+        var renderXAxisSpy = spyOn(D3Helper, 'renderXAxis');
+        var renderYAxisSpy = spyOn(D3Helper, 'renderYAxis');
 
         histoPlot.renderPlot();
         expect(renderCanvasSpy).toHaveBeenCalledWith(parentNode, plotId, 1000, 500);
@@ -79,21 +79,21 @@ describe("Histogram Plot", function () {
         var mockYScale = new MockLinearScale();
 
 
-        spyOn(window, 'renderCanvas').and.returnValue(canvas);
+        spyOn(D3Helper, 'renderCanvas').and.returnValue(canvas);
 
-        spyOn(window, 'buildLinearXScale').and.returnValue(mockXScale);
-        spyOn(window, 'buildLinearYScale').and.returnValue(mockYScale);
+        spyOn(D3Helper, 'buildLinearXScale').and.returnValue(mockXScale);
+        spyOn(D3Helper, 'buildLinearYScale').and.returnValue(mockYScale);
         var binnedData = [
             {x: 3523, y: 3423}
         ];
         var scaledData = [
             {x: 23, y: 245}
         ];
-        spyOn(window, 'renderXAxis');
-        spyOn(window, 'renderYAxis');
-        var binSpy = spyOn(window, 'binData').and.returnValue(binnedData);
-        var scaleSpy = spyOn(window, 'scaleBinnedData').and.returnValue(scaledData);
-        var renderDataSpy = spyOn(window, 'renderHistogramData');
+        spyOn(D3Helper, 'renderXAxis');
+        spyOn(D3Helper, 'renderYAxis');
+        var binSpy = spyOn(HistogramHelper, 'binData').and.returnValue(binnedData);
+        var scaleSpy = spyOn(HistogramHelper, 'scaleBinnedData').and.returnValue(scaledData);
+        var renderDataSpy = spyOn(HistogramHelper, 'renderHistogramData');
 
         histoPlot.renderPlot();
 

@@ -1,16 +1,19 @@
-function binData(data, xScale , numberOfBins) {
+function HistogramHelper() {
 
-
-    return  d3.layout.histogram().bins(xScale.ticks(numberOfBins))(data);;
 }
-function scaleBinnedData(binnedData, xScale, yScale){
+
+HistogramHelper.binData = function (data, xScale, numberOfBins) {
+    return  d3.layout.histogram().bins(xScale.ticks(numberOfBins))(data);
+    ;
+}
+HistogramHelper.scaleBinnedData = function (binnedData, xScale, yScale) {
     var scaledData = [];
     binnedData.forEach(function (data) {
         scaledData.push({x: xScale(data.x), y: yScale(data.y), width: xScale(data.dx)});
     });
     return scaledData
 }
-function renderHistogramData(canvas, data, xAxisOffset, yAxisOffset, graphingAreaHeight) {
+HistogramHelper.renderHistogramData = function (canvas, data, xAxisOffset, yAxisOffset, graphingAreaHeight) {
     var dataGroup = canvas.append('g').attr('transform', 'translate(' + xAxisOffset + ', ' + yAxisOffset + ')').attr('class', 'dataGroup');
     var bar = dataGroup.selectAll(".bar")
         .data(data)

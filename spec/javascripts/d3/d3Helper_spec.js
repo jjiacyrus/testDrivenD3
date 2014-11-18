@@ -9,7 +9,7 @@ describe('d3 Helpers', function () {
 
         var theRange = new Range(10, 500);
         var theDomain = new Range(50, 300);
-        scale = buildLinearXScale(theRange, theDomain);
+        scale = D3Helper.buildLinearXScale(theRange, theDomain);
         expect(scale).not.toBeUndefined();
         expect(scale).toEqual(scaleToReturn);
 
@@ -31,7 +31,7 @@ describe('d3 Helpers', function () {
 
         var theRange = new Range(10, 500);
         var theDomain = new Range(50, 300);
-        scale = buildLinearYScale(theRange, theDomain);
+        scale = D3Helper.buildLinearYScale(theRange, theDomain);
         expect(scale).not.toBeUndefined();
         expect(scale).toEqual(scaleToReturn);
 
@@ -50,7 +50,7 @@ describe('d3 Helpers', function () {
         var width = 25;
         var height = 500;
 
-        var theCanvas = renderCanvas("div#target-div", 'canvas_mcgee', width, height);
+        var theCanvas = D3Helper.renderCanvas("div#target-div", 'canvas_mcgee', width, height);
 
         var parentDiv = d3.select("div#target-div");
         var canvasSvg = parentDiv.select('svg');
@@ -80,7 +80,7 @@ describe('d3 Helpers', function () {
         var xScale = new MockLinearScale();
         var xTranslate = 35;
         var yTranslate = 20;
-        renderXAxis(canvas, xScale, xTranslate, yTranslate);
+        D3Helper.renderXAxis(canvas, xScale, xTranslate, yTranslate);
 
         expect(canvasAppendSpy).toHaveBeenCalledWith('g');
         expect(mockD3Node.attr).toHaveBeenCalledWith('class', 'x axis');
@@ -107,7 +107,7 @@ describe('d3 Helpers', function () {
         var yScale = new MockLinearScale();
         var xTranslate = 20;
         var yTranslate = 15;
-        renderYAxis(canvas, yScale, xTranslate, yTranslate);
+        D3Helper.renderYAxis(canvas, yScale, xTranslate, yTranslate);
 
         expect(canvasAppendSpy).toHaveBeenCalledWith('g');
         expect(mockD3Node.attr).toHaveBeenCalledWith('class', 'y axis');

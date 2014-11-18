@@ -10,11 +10,11 @@ function DotPlot(plotModel, plotSpec, experiment) {
         var yTopPadding = 30;
         var yHeight = height - yTopPadding;
 
-        var xScale = buildLinearXScale(new Range(0, width - xRightPadding), plotSpec.getXRange());
-        var yScale = buildLinearYScale(new Range(yBottomPadding, yHeight), plotSpec.getYRange());
+        var xScale = D3Helper.buildLinearXScale(new Range(0, width - xRightPadding), plotSpec.getXRange());
+        var yScale = D3Helper.buildLinearYScale(new Range(yBottomPadding, yHeight), plotSpec.getYRange());
 
         var xAxisOffset = 50;
-        var canvas = renderCanvas(plotModel.getParentNode(), plotModel.getPlotId(), width, height);
+        var canvas = D3Helper.renderCanvas(plotModel.getParentNode(), plotModel.getPlotId(), width, height);
 
         renderAxes(canvas, xScale, yScale, xAxisOffset, yHeight);
         renderPlotData(canvas, experiment.getCurrentDataset(), plotSpec, xScale, yScale, xAxisOffset);
@@ -36,8 +36,8 @@ function DotPlot(plotModel, plotSpec, experiment) {
     }
 
     function renderAxes(canvas, xScale, yScale, xAxisOffset, yHeight) {
-        renderXAxis(canvas, xScale, xAxisOffset, yHeight);
-        renderYAxis(canvas, yScale, xAxisOffset, 0);
+        D3Helper.renderXAxis(canvas, xScale, xAxisOffset, yHeight);
+        D3Helper.renderYAxis(canvas, yScale, xAxisOffset, 0);
     }
 
     function getChannelData(dataSet, parameter) {
@@ -56,8 +56,8 @@ function DotPlot(plotModel, plotSpec, experiment) {
     function renderPlotData(canvas, dataSet, plotSpec, xScale, yScale, xAxisOffset) {
         var xChannelData = getChannelData(dataSet, plotSpec.getXParameter());
         var yChannelData = getChannelData(dataSet, plotSpec.getYParameter());
-        var formattedData = formatData(xChannelData, yChannelData, xScale, yScale, plotSpec.getXRange(), plotSpec.getYRange());
-        renderScatterPlotData(canvas, formattedData, xAxisOffset, 0);
+        var formattedData = DotPlotHelper.formatData(xChannelData, yChannelData, xScale, yScale, plotSpec.getXRange(), plotSpec.getYRange());
+        DotPlotHelper.renderScatterPlotData(canvas, formattedData, xAxisOffset, 0);
     }
 
 
