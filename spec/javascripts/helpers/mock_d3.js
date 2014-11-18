@@ -6,6 +6,11 @@ function MockScale() {
     scale.maxDomain = 0;
     scale.clampSet = false;
     scale.ticksToReturn = 0;
+
+    scale.ticks = function(numberOfTicks){
+        scale.numberOfTicksPassedIn = numberOfTicks;
+        return scale.ticksToReturn;
+    }
     scale.range = function (rangeArray) {
         scale.minRange = rangeArray[0];
         scale.maxRange = rangeArray[1];
@@ -16,10 +21,7 @@ function MockScale() {
         scale.maxDomain = domainArray[1];
         return scale;
     }
-    scale.ticks = function(numberOfTicks){
-        scale.numberOfTicksPassedIn = numberOfTicks;
-        return scale.ticksToReturn;
-    }
+
     scale.clamp = function(clamp){
         scale.clampSet = clamp;
         return scale;
@@ -46,7 +48,8 @@ function MockHistogram(binnedData){
 function MockAxis (){
     this.scalePassedIn = undefined;
     this.orientation = "";
-    this.tickValues = "";
+    this.ticksFormat= '';
+    this.numberOfTicksPassedIn = 0;
     this.scale = function(scalePassedIn){
         this.scalePassedIn =  scalePassedIn;
         return this;
@@ -55,8 +58,11 @@ function MockAxis (){
         this.orientation = orientation;
         return this;
     }
-    this.tickValues =function(tickValues){
-        this.tickValues = tickValues;
+
+
+    this.ticks = function(numberOfTicks, format){
+        this.numberOfTicksPassedIn = numberOfTicks;
+        this.ticksFormat = format;
         return this;
     }
 

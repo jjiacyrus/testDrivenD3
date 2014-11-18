@@ -6,8 +6,8 @@ function PlotSpecification(xParameter, yParameter, xRange, yRange) {
     var yParameter = yParameter;
     var xRange = xRange;
     var yRange = yRange;
-    this.xScale = LIN;
-    this.yScale = LIN;
+    var xScale = LIN;
+    var yScale = LIN;
     var observers = [];
 
     function notifyObserversOfChange(observers) {
@@ -21,13 +21,13 @@ function PlotSpecification(xParameter, yParameter, xRange, yRange) {
     }
 
     this.getXScale = function () {
-        return this.xScale;
+        return xScale;
     }
     this.getYScale = function () {
-        return this.yScale;
+        return yScale;
     }
     this.setXScale = function (scale) {
-        this.xScale = scale;
+        xScale = scale;
         if (scale == LOG) {
             if (xRange && xRange.min == 0) {
                 xRange = new Range(1, xRange.max);
@@ -38,7 +38,7 @@ function PlotSpecification(xParameter, yParameter, xRange, yRange) {
     }
 
     this.setYScale = function (scale) {
-        this.yScale = scale;
+        yScale = scale;
         if (scale == LOG) {
             if (xRange && yRange.min == 0) {
                 yRange = new Range(1, yRange.max);

@@ -42,7 +42,8 @@ buildAxis = function (canvas, scale, xTranslate, yTranslate, className, orientat
     axisGroup
         .attr("class", className)
         .attr("transform", "translate(" + xTranslate + " ," + yTranslate + ")");
-    var axis = d3.svg.axis().scale(scale).orient(orientation);
+    var axis = d3.svg.axis().scale(scale).orient(orientation).ticks(4, ".0f");
+
     axisGroup.call(axis);
 }
 

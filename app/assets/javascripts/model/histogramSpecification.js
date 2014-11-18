@@ -1,6 +1,7 @@
 function HistogramSpecification(xParameter, xRange, numberOfBins) {
     var xParameter = xParameter;
-    var xRange = xRange
+    var xRange = xRange;
+    var xScale = LIN;
     var numberOfBins = numberOfBins;
     var observers = [];
 
@@ -33,7 +34,18 @@ function HistogramSpecification(xParameter, xRange, numberOfBins) {
         xParameter = parameter;
         notifyObserversOfChange(observers);
     }
-
+    this.setXScale = function(scale){
+        xScale = scale;
+        if (scale == LOG) {
+            if (xRange && xRange.min == 0) {
+                xRange = new Range(1, xRange.max);
+            }
+        }
+        notifyObserversOfChange(observers);
+    }
+    this.getXScale = function(){
+        return xScale;
+    }
     this.getNumberOfBins = function () {
         return numberOfBins;
     }

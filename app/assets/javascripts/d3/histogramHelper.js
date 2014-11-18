@@ -4,7 +4,6 @@ function HistogramHelper() {
 
 HistogramHelper.binData = function (data, xScale, numberOfBins) {
     return  d3.layout.histogram().bins(xScale.ticks(numberOfBins))(data);
-    ;
 }
 HistogramHelper.scaleBinnedData = function (binnedData, xScale, yScale) {
     var scaledData = [];

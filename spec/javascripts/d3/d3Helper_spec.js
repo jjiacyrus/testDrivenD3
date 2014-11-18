@@ -129,6 +129,10 @@ describe('d3 Helpers', function () {
         expect(mockD3Node.call).toHaveBeenCalledWith(mockAxis);
         expect(mockAxis.scalePassedIn).toEqual(xScale);
         expect(mockAxis.orientation).toEqual("bottom");
+        expect(mockAxis.numberOfTicksPassedIn).toEqual(4);
+        expect(mockAxis.ticksFormat).toEqual(".0f");
+
+
 
     });
 
@@ -156,6 +160,9 @@ describe('d3 Helpers', function () {
         expect(mockD3Node.call).toHaveBeenCalledWith(mockAxis);
         expect(mockAxis.scalePassedIn).toEqual(yScale);
         expect(mockAxis.orientation).toEqual("left");
+        expect(mockAxis.numberOfTicksPassedIn).toEqual(4);
+        expect(mockAxis.ticksFormat).toEqual(".0f");
+
     });
 
 
