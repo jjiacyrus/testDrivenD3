@@ -13,7 +13,8 @@ function HistogramPlot(plotModel, histogramSpec, experiment) {
         var xScale = D3Helper.buildLinearXScale(new Range(0, width - xRightPadding), histogramSpec.getXRange());
 
         var channelData = getChannelData(experiment.getCurrentDataset(), histogramSpec.getXParameter());
-        var binnedData = HistogramHelper.binData(channelData, xScale, histogramSpec.getNumberOfBins());
+        var dataInDomain = HistogramHelper.getDataInDomain(channelData, histogramSpec.getXRange());
+        var binnedData = HistogramHelper.binData(dataInDomain, xScale, histogramSpec.getNumberOfBins());
 
         var yScale = D3Helper.buildLinearYScale(new Range(yBottomPadding, yHeight), new Range(0, Math.floor(d3.max(binnedData, function (d) {
             return d.y;

@@ -43,10 +43,13 @@ describe("Histogram Plot", function () {
 
         var renderXAxisSpy = spyOn(D3Helper, 'renderXAxis');
         var renderYAxisSpy = spyOn(D3Helper, 'renderYAxis');
+        var dataInDomain = [35, 125, 12, 51];
+        var dataInDomainSpy = spyOn(HistogramHelper, 'getDataInDomain').and.returnValue(dataInDomain);
 
         histoPlot.renderPlot();
         expect(renderCanvasSpy).toHaveBeenCalledWith(parentNode, plotId, 1000, 500);
-        expect(binSpy).toHaveBeenCalledWith(channelData, mockXScale, numberOfBins);
+        expect(dataInDomainSpy).toHaveBeenCalledWith(channelData,xDomain);
+        expect(binSpy).toHaveBeenCalledWith(dataInDomain, mockXScale, numberOfBins);
 
         expect(buildXScaleSpy).toHaveBeenCalledWith(new Range(0, 935), xDomain);
         expect(renderXAxisSpy).toHaveBeenCalledWith(expectedCanvas, mockXScale, expectedTranslate, 470);
@@ -55,7 +58,7 @@ describe("Histogram Plot", function () {
         expect(renderYAxisSpy).toHaveBeenCalledWith(expectedCanvas, mockYScale, expectedTranslate, 0);
 
     });
-    it("bins, scales and renders the data in the canvas", function () {
+    it("filters, bins, scales and renders the data in the canvas", function () {
 
         var parentNode = "div#target-div";
         affix(parentNode);
@@ -91,13 +94,17 @@ describe("Histogram Plot", function () {
         ];
         spyOn(D3Helper, 'renderXAxis');
         spyOn(D3Helper, 'renderYAxis');
+        var dataInDomain = [35, 125, 12, 51];
+        var dataInDomainSpy = spyOn(HistogramHelper, 'getDataInDomain').and.returnValue(dataInDomain);
         var binSpy = spyOn(HistogramHelper, 'binData').and.returnValue(binnedData);
         var scaleSpy = spyOn(HistogramHelper, 'scaleBinnedData').and.returnValue(scaledData);
         var renderDataSpy = spyOn(HistogramHelper, 'renderHistogramData');
 
+
         histoPlot.renderPlot();
 
-        expect(binSpy).toHaveBeenCalledWith(ch2, mockXScale, numberOfBins);
+        expect(dataInDomainSpy).toHaveBeenCalledWith(ch2,xDomain);
+        expect(binSpy).toHaveBeenCalledWith(dataInDomain, mockXScale, numberOfBins);
         expect(scaleSpy).toHaveBeenCalledWith(binnedData, mockXScale, mockYScale);
         expect(renderDataSpy).toHaveBeenCalledWith(canvas, scaledData, 50, 0, 470);
 

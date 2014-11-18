@@ -23,6 +23,15 @@ describe("Histogram Helper", function () {
         expect(numberOfBins).toEqual(xScale.numberOfTicksPassedIn);
     });
 
+    it('should get data in domain', function () {
+        var data = [5,50,55,80,45,30];
+
+        var dataInRange = HistogramHelper.getDataInDomain(data, new Range(40,60));
+        expect(dataInRange).toEqual([50,55,45]);
+
+    });
+
+
     it('should scale the binned data', function(){
         var binnedData = [
             {x: 24, y: 32, dx: 35},

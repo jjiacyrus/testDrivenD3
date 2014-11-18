@@ -2,6 +2,16 @@ function HistogramHelper() {
 
 }
 
+HistogramHelper.getDataInDomain = function (data, domain){
+
+    dataInDomain = [];
+    data.forEach(function(dataPoint){
+        if(domain.contains(dataPoint)){
+            dataInDomain.push(dataPoint);
+        }
+    })
+    return dataInDomain;
+}
 HistogramHelper.binData = function (data, xScale, numberOfBins) {
     return  d3.layout.histogram().bins(xScale.ticks(numberOfBins))(data);
 }
