@@ -17,6 +17,19 @@ D3Helper.buildLinearYScale = function (range, domain) {
     linear.domain([domain.max, domain.min]);
     return linear;
 }
+
+D3Helper.buildLogXScale = function (range, domain) {
+    var log = d3.scale.log();
+    log.range([range.min, range.max]);
+    log.domain([domain.min, domain.max]);
+    return log;
+}
+D3Helper.buildLogYScale = function (range, domain) {
+    var log = d3.scale.log();
+    log.range([range.min, range.max]);
+    log.domain([domain.max, domain.min]);
+    return log;
+}
 D3Helper.renderCanvas = function (parent, plotId, width, height) {
     var canvas = d3.select(parent).append('svg').attr('id', plotId)
         .attr('height', height)

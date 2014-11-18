@@ -42,7 +42,7 @@ describe('Dot Plot Helpers', function () {
         scaledXData[41] = 4.1;
 
 
-        var mockXScale = MockLinearScale();
+        var mockXScale = MockScale();
         mockXScale.dataToScaledData = scaledXData;
 
 
@@ -52,7 +52,7 @@ describe('Dot Plot Helpers', function () {
         scaledYData[52] = 520;
         scaledYData[49] = 490;
 
-        var mockYScale = MockLinearScale();
+        var mockYScale = MockScale();
         mockYScale.dataToScaledData = scaledYData;
         var formattedData = DotPlotHelper.formatData(xData, yData, mockXScale, mockYScale, new Range(0, 500), new Range(0,500));
 
@@ -72,7 +72,7 @@ describe('Dot Plot Helpers', function () {
         scaledXData[20] = 23.4;
 
 
-        var mockXScale = MockLinearScale();
+        var mockXScale = MockScale();
         mockXScale.dataToScaledData = scaledXData;
 
 
@@ -80,7 +80,7 @@ describe('Dot Plot Helpers', function () {
         scaledYData[60] = 1200;
         scaledYData[70] = 1540;
 
-        var mockYScale = MockLinearScale();
+        var mockYScale = MockScale();
         mockYScale.dataToScaledData = scaledYData;
         var xRange = new Range(10, 40);
         var yRange = new Range(50, 90);

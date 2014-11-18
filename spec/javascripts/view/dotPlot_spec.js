@@ -35,8 +35,8 @@ describe("Dot Plot", function () {
 
 
         var expectedCanvas = d3.select('body').append('svg');
-        var mockXScale = new MockLinearScale();
-        var mockYScale = new MockLinearScale();
+        var mockXScale = new MockScale();
+        var mockYScale = new MockScale();
         var expectedTranslate = 50;
 
 
@@ -62,7 +62,58 @@ describe("Dot Plot", function () {
         expect(renderYAxisSpy).toHaveBeenCalledWith(expectedCanvas, mockYScale, expectedTranslate, 0);
 
     });
+    it("renders a canvas, and log axes in the a div if the plot spec defines log scales", function () {
 
+        var parentNode = "div#target-div";
+        affix(parentNode);
+
+        var plotSpec = new PlotSpecification();
+
+        var xDomain = new Range(12, 223);
+        var yDomain = new Range(46212, 223);
+        plotSpec.setXRange(xDomain);
+        plotSpec.setYRange(yDomain);
+        plotSpec.setXScale(LOG);
+        plotSpec.setYScale(LOG);
+
+        var plotId = "plotterton";
+        var dataset = new Dataset('', [], [], [], []);
+        var width = 1000;
+        var height = 500;
+
+        var plotModel = new PlotModel(parentNode, plotId, width, height);
+        var experiment = new Experiment(dataset);
+        var dotPlot = new DotPlot(plotModel, plotSpec, experiment);
+
+
+        var expectedCanvas = d3.select('body').append('svg');
+        var mockXScale = new MockScale();
+        var mockYScale = new MockScale();
+        var expectedTranslate = 50;
+
+
+        var renderCanvasSpy = spyOn(D3Helper, 'renderCanvas').and.returnValue(expectedCanvas);
+
+        var buildXScaleSpy = spyOn(D3Helper, 'buildLogXScale').and.returnValue(mockXScale);
+        var buildYScaleSpy = spyOn(D3Helper, 'buildLogYScale').and.returnValue(mockYScale);
+
+        var renderXAxisSpy = spyOn(D3Helper, 'renderXAxis');
+        var renderYAxisSpy = spyOn(D3Helper, 'renderYAxis');
+
+        dotPlot.renderPlot();
+
+
+        expect(new Range(0,10)).toEqual(new Range(0,10));
+
+        expect(renderCanvasSpy).toHaveBeenCalledWith(parentNode, plotId, 1000, 500);
+
+        expect(buildXScaleSpy).toHaveBeenCalledWith(new Range(0, 935), xDomain);
+        expect(buildYScaleSpy).toHaveBeenCalledWith(new Range(10, 470), yDomain);
+
+        expect(renderXAxisSpy).toHaveBeenCalledWith(expectedCanvas, mockXScale, expectedTranslate, 470);
+        expect(renderYAxisSpy).toHaveBeenCalledWith(expectedCanvas, mockYScale, expectedTranslate, 0);
+
+    });
     it("scales and renders the data in the canvas", function () {
 
         var parentNode = "div#target-div";
@@ -88,8 +139,8 @@ describe("Dot Plot", function () {
 
 
         var canvas = d3.select('body').append('svg');
-        var mockXScale = new MockLinearScale();
-        var mockYScale = new MockLinearScale();
+        var mockXScale = new MockScale();
+        var mockYScale = new MockScale();
         var channel2Data = [124, 12412, 412, 4, 12414];
         var channel4Data = [163224, 34, 413422, 3424, 414];
 
@@ -145,8 +196,8 @@ describe("Dot Plot", function () {
 
 
         var canvas = d3.select('body').append('svg');
-        var mockXScale = new MockLinearScale();
-        var mockYScale = new MockLinearScale();
+        var mockXScale = new MockScale();
+        var mockYScale = new MockScale();
         var channel1Data = [124, 12412, 412, 4, 12414];
         var channel3Data = [163224, 34, 413422, 3424, 414];
 

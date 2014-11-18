@@ -1,7 +1,7 @@
 describe("Histogram Helper", function () {
     it('should bin  data using the d3 histogram', function () {
         var data = [34, 23523, 5, 235, 23, 235, 2352];
-        var xScale = new MockLinearScale();
+        var xScale = new MockScale();
         var scaledTicks = 523;
         xScale.ticksToReturn = scaledTicks;
 
@@ -28,9 +28,9 @@ describe("Histogram Helper", function () {
             {x: 24, y: 32, dx: 35},
             {x: 12, y: 21, dx: 25}
         ];
-        var xScale = new MockLinearScale();
+        var xScale = new MockScale();
 
-        var yScale = new MockLinearScale();
+        var yScale = new MockScale();
 
         var xScaledData = {};
         xScaledData[24] = 240;

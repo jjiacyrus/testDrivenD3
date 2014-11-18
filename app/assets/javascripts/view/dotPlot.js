@@ -2,6 +2,20 @@ function DotPlot(plotModel, plotSpec, experiment) {
     plotSpec.addObserver(this);
     experiment.addObserver(this);
 
+    function buildXScale(plotSpec, width, xRightPadding) {
+        if(plotSpec.getXScale() == LOG){
+            return D3Helper.buildLogXScale(new Range(0, width - xRightPadding), plotSpec.getXRange());
+        }
+        return D3Helper.buildLinearXScale(new Range(0, width - xRightPadding), plotSpec.getXRange());
+    }
+
+    function buildYScale(plotSpec, yBottomPadding, yHeight) {
+        if(plotSpec.getYScale() == LOG){
+            return D3Helper.buildLogYScale(new Range(yBottomPadding, yHeight), plotSpec.getYRange());
+        }
+        return D3Helper.buildLinearYScale(new Range(yBottomPadding, yHeight), plotSpec.getYRange());
+    }
+
     this.renderPlot = function () {
         var height = plotModel.getHeight();
         var width = plotModel.getWidth();
@@ -10,8 +24,8 @@ function DotPlot(plotModel, plotSpec, experiment) {
         var yTopPadding = 30;
         var yHeight = height - yTopPadding;
 
-        var xScale = D3Helper.buildLinearXScale(new Range(0, width - xRightPadding), plotSpec.getXRange());
-        var yScale = D3Helper.buildLinearYScale(new Range(yBottomPadding, yHeight), plotSpec.getYRange());
+        var xScale = buildXScale(plotSpec,width, xRightPadding);
+        var yScale = buildYScale(plotSpec, yBottomPadding, yHeight);
 
         var xAxisOffset = 50;
         var canvas = D3Helper.renderCanvas(plotModel.getParentNode(), plotModel.getPlotId(), width, height);

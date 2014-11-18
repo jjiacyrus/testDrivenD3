@@ -1,8 +1,8 @@
 describe('d3 Helpers', function () {
 
 
-    it('should return a scale based on the canvas size and the range', function () {
-        var scaleToReturn = new MockLinearScale();
+    it('should return a linear scale based on the canvas size and the range', function () {
+        var scaleToReturn = new MockScale();
         d3.scale.linear = function () {
             return scaleToReturn;
         };
@@ -21,8 +21,8 @@ describe('d3 Helpers', function () {
 
     });
 
-    it('should return a scale based on the canvas size and the range with a flipped max and min for y', function () {
-        var scaleToReturn = new MockLinearScale();
+    it('should return a linear scale based on the canvas size and the range with a flipped max and min for y', function () {
+        var scaleToReturn = new MockScale();
 
 
         d3.scale.linear = function () {
@@ -44,6 +44,47 @@ describe('d3 Helpers', function () {
     });
 
 
+    it('should return a log scale based on the canvas size and the range', function () {
+        var scaleToReturn = new MockScale();
+        d3.scale.log = function () {
+            return scaleToReturn;
+        };
+
+        var theRange = new Range(10, 500);
+        var theDomain = new Range(50, 300);
+        scale = D3Helper.buildLogXScale(theRange, theDomain);
+        expect(scale).not.toBeUndefined();
+        expect(scale).toEqual(scaleToReturn);
+
+        expect(scale.minRange).toEqual(theRange.min);
+        expect(scale.maxRange).toEqual(theRange.max);
+
+        expect(scale.minDomain).toEqual(theDomain.min);
+        expect(scale.maxDomain).toEqual(theDomain.max);
+
+    });
+
+    it('should return a log scale based on the canvas size and the range with a flipped max and min for y', function () {
+        var scaleToReturn = new MockScale();
+
+
+        d3.scale.log = function () {
+            return scaleToReturn;
+        };
+
+        var theRange = new Range(10, 500);
+        var theDomain = new Range(50, 300);
+        scale = D3Helper.buildLogYScale(theRange, theDomain);
+        expect(scale).not.toBeUndefined();
+        expect(scale).toEqual(scaleToReturn);
+
+        expect(scale.minRange).toEqual(theRange.min);
+        expect(scale.maxRange).toEqual(theRange.max);
+
+        expect(scale.minDomain).toEqual(theDomain.max);
+        expect(scale.maxDomain).toEqual(theDomain.min);
+
+    });
     it('should be able to create a canvas of a certain size', function () {
 
         affix("div#target-div");
@@ -77,7 +118,7 @@ describe('d3 Helpers', function () {
 
         var canvasAppendSpy = spyOn(canvas, 'append').and.returnValue(mockD3Node);
 
-        var xScale = new MockLinearScale();
+        var xScale = new MockScale();
         var xTranslate = 35;
         var yTranslate = 20;
         D3Helper.renderXAxis(canvas, xScale, xTranslate, yTranslate);
@@ -104,7 +145,7 @@ describe('d3 Helpers', function () {
 
         var canvasAppendSpy = spyOn(canvas, 'append').and.returnValue(mockD3Node);
 
-        var yScale = new MockLinearScale();
+        var yScale = new MockScale();
         var xTranslate = 20;
         var yTranslate = 15;
         D3Helper.renderYAxis(canvas, yScale, xTranslate, yTranslate);

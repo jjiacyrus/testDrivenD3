@@ -1,4 +1,4 @@
-function MockLinearScale() {
+function MockScale() {
     scale.dataToScaledData ={};
     scale.minRange = 0;
     scale.maxRange = 0;

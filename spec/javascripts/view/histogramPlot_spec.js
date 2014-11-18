@@ -24,8 +24,8 @@ describe("Histogram Plot", function () {
 
 
         var expectedCanvas = d3.select('body').append('svg');
-        var mockXScale = new MockLinearScale();
-        var mockYScale = new MockLinearScale();
+        var mockXScale = new MockScale();
+        var mockYScale = new MockScale();
         var expectedTranslate = 50;
 
         var binnedData = [
@@ -75,8 +75,8 @@ describe("Histogram Plot", function () {
         var histoPlot = new HistogramPlot(plotModel, histogramSpec, experiment);
 
         var canvas = d3.select('body').append('svg');
-        var mockXScale = new MockLinearScale();
-        var mockYScale = new MockLinearScale();
+        var mockXScale = new MockScale();
+        var mockYScale = new MockScale();
 
 
         spyOn(D3Helper, 'renderCanvas').and.returnValue(canvas);

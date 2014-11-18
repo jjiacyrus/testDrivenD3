@@ -66,6 +66,48 @@ describe("Plot Control Builder", function () {
         expect(plotSpec.getXParameter()).toEqual(CH4);
     });
 
+    it('should create a x scale selector', function () {
+
+        affix("div#top-div");
+
+        var plotSpec = new PlotSpecification();
+        plotSpec.setXScale(LOG);
+        PlotControlBuilder.addXScaleSelector('#top-div', plotSpec);
+        var xDropdown = $('#top-div').find('select.xScale');
+        expect(xDropdown.length).toBeGreaterThan(0);
+        var xOptions = xDropdown.find('option');
+        expect(xOptions.length).toEqual(2);
+        expect($(xOptions[0]).attr('value')).toEqual(LIN);
+        expect($(xOptions[0]).text()).toEqual('Linear');
+        expect($(xOptions[1]).attr('value')).toEqual(LOG);
+        expect($(xOptions[1]).text()).toEqual('Log');
+        expect(xDropdown.find('option:selected').attr('value')).toEqual(plotSpec.getXScale());
+        $('select.xScale>option:eq(0)').prop('selected', true);
+        $('select.xScale').change();
+        expect(plotSpec.getXScale()).toEqual(LIN);
+    });
+
+    it('should create a y scale selector', function () {
+
+        affix("div#top-div");
+
+        var plotSpec = new PlotSpecification();
+        plotSpec.setYScale(LOG);
+        PlotControlBuilder.addYScaleSelector('#top-div', plotSpec);
+        var yDropdown = $('#top-div').find('select.yScale');
+        expect(yDropdown.length).toBeGreaterThan(0);
+        var yOptions = yDropdown.find('option');
+        expect(yOptions.length).toEqual(2);
+        expect($(yOptions[0]).attr('value')).toEqual(LIN);
+        expect($(yOptions[0]).text()).toEqual('Linear');
+        expect($(yOptions[1]).attr('value')).toEqual(LOG);
+        expect($(yOptions[1]).text()).toEqual('Log');
+        expect(yDropdown.find('option:selected').attr('value')).toEqual(plotSpec.getYScale());
+        $('select.yScale>option:eq(0)').prop('selected', true);
+        $('select.yScale').change();
+        expect(plotSpec.getYScale()).toEqual(LIN);
+    });
+
     it('creates an x range setter', function () {
         affix("div#top-div");
 

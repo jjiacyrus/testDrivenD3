@@ -24,8 +24,15 @@ PlotControlBuilder.addDestroyButton = function (parentDiv, plotCorral) {
     })
 }
 
-function determineSelection(channel, plotSpecChannel) {
+function determineParameterSelection(channel, plotSpecChannel) {
     if (plotSpecChannel == channel) {
+        return ' selected';
+    }
+    return '';
+}
+
+function determineScaleSelection(scale, plotScale) {
+    if (plotScale == scale) {
         return ' selected';
     }
     return '';
@@ -43,10 +50,33 @@ PlotControlBuilder.addXParameterSelector = function (parentDiv, plotSpec) {
     });
 
     var currentXParameter = plotSpec.getXParameter();
-    $(xDropdownNode).append("<option value=" + CH1 + determineSelection(CH1, currentXParameter) + ">" + CH1 + "</option>");
-    $(xDropdownNode).append("<option value=" + CH2 + determineSelection(CH2, currentXParameter) + ">" + CH2 + "</option>");
-    $(xDropdownNode).append("<option value=" + CH3 + determineSelection(CH3, currentXParameter) + ">" + CH3 + "</option>");
-    $(xDropdownNode).append("<option value=" + CH4 + determineSelection(CH4, currentXParameter) + ">" + CH4 + "</option>");
+    $(xDropdownNode).append("<option value=" + CH1 + determineParameterSelection(CH1, currentXParameter) + ">" + CH1 + "</option>");
+    $(xDropdownNode).append("<option value=" + CH2 + determineParameterSelection(CH2, currentXParameter) + ">" + CH2 + "</option>");
+    $(xDropdownNode).append("<option value=" + CH3 + determineParameterSelection(CH3, currentXParameter) + ">" + CH3 + "</option>");
+    $(xDropdownNode).append("<option value=" + CH4 + determineParameterSelection(CH4, currentXParameter) + ">" + CH4 + "</option>");
+}
+
+PlotControlBuilder.addXScaleSelector = function (parentNode, plotSpec) {
+    var xDropdownNode = parentNode + ' select.xScale';
+    $(parentNode).append("<select class='xScale'></select>");
+    $(xDropdownNode).on('change', function () {
+        plotSpec.setXScale($(xDropdownNode + ' option:selected').val());
+
+    });
+    $(xDropdownNode).append("<option value=" + LIN + determineScaleSelection(LIN, plotSpec.getXScale()) + ">Linear</option>");
+    $(xDropdownNode).append("<option value=" + LOG + determineScaleSelection(LOG, plotSpec.getXScale()) + ">Log</option>");
+
+}
+PlotControlBuilder.addYScaleSelector = function (parentNode, plotSpec) {
+    var yDropdownNode = parentNode + ' select.yScale';
+    $(parentNode).append("<select class='yScale'></select>");
+    $(yDropdownNode).on('change', function () {
+        plotSpec.setYScale($(yDropdownNode + ' option:selected').val());
+
+    });
+    $(yDropdownNode).append("<option value=" + LIN + determineScaleSelection(LIN, plotSpec.getYScale()) + ">Linear</option>");
+    $(yDropdownNode).append("<option value=" + LOG + determineScaleSelection(LOG, plotSpec.getYScale()) + ">Log</option>");
+
 }
 
 PlotControlBuilder.addXRangeSetter = function (parentDiv, plotSpec) {
@@ -89,10 +119,10 @@ PlotControlBuilder.addYParameterSelector = function (parentDiv, plotSpec) {
     });
 
     var currentYParameter = plotSpec.getYParameter();
-    $(yDropdownNode).append("<option value=" + CH1 + determineSelection(CH1, currentYParameter) + ">" + CH1 + "</option>");
-    $(yDropdownNode).append("<option value=" + CH2 + determineSelection(CH2, currentYParameter) + ">" + CH2 + "</option>");
-    $(yDropdownNode).append("<option value=" + CH3 + determineSelection(CH3, currentYParameter) + ">" + CH3 + "</option>");
-    $(yDropdownNode).append("<option value=" + CH4 + determineSelection(CH4, currentYParameter) + ">" + CH4 + "</option>");
+    $(yDropdownNode).append("<option value=" + CH1 + determineParameterSelection(CH1, currentYParameter) + ">" + CH1 + "</option>");
+    $(yDropdownNode).append("<option value=" + CH2 + determineParameterSelection(CH2, currentYParameter) + ">" + CH2 + "</option>");
+    $(yDropdownNode).append("<option value=" + CH3 + determineParameterSelection(CH3, currentYParameter) + ">" + CH3 + "</option>");
+    $(yDropdownNode).append("<option value=" + CH4 + determineParameterSelection(CH4, currentYParameter) + ">" + CH4 + "</option>");
 
 }
 

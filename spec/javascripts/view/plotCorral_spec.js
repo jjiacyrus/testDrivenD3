@@ -23,10 +23,13 @@ describe("Plot Corral", function () {
         var dotPlotConstructorSpy = spyOn(window, 'DotPlot').and.returnValue(mockDotPlot);
         var addDestroyButtonSpy = spyOn(PlotControlBuilder, 'addDestroyButton');
         var addXParameterSelectorSpy = spyOn(PlotControlBuilder, 'addXParameterSelector');
+        var addXScaleSelectorSpy = spyOn(PlotControlBuilder, 'addXScaleSelector');
+
         var addYParameterSelectorSpy = spyOn(PlotControlBuilder, 'addYParameterSelector');
+        var addYScaleSelectorSpy = spyOn(PlotControlBuilder, 'addYScaleSelector');
+
         var addXRangeSetterSpy = spyOn(PlotControlBuilder, 'addXRangeSetter');
         var addYRangeSetterSpy = spyOn(PlotControlBuilder, 'addYRangeSetter');
-
 
         plotCorral.createDotPlot();
 
@@ -41,7 +44,9 @@ describe("Plot Corral", function () {
         expect(mockDotPlot.renderCalled).toBeTruthy();
         expect(addDestroyButtonSpy).toHaveBeenCalledWith(parentDivSelector, plotCorral);
         expect(addXParameterSelectorSpy).toHaveBeenCalledWith(parentDivSelector + ' div.controls', plotSpec);
+        expect(addXScaleSelectorSpy).toHaveBeenCalledWith(parentDivSelector + ' div.controls', plotSpec);
         expect(addYParameterSelectorSpy).toHaveBeenCalledWith(parentDivSelector + ' div.controls', plotSpec);
+        expect(addYScaleSelectorSpy).toHaveBeenCalledWith(parentDivSelector + ' div.controls', plotSpec);
         expect(addXRangeSetterSpy).toHaveBeenCalledWith(parentDivSelector + ' div.controls', plotSpec);
         expect(addYRangeSetterSpy).toHaveBeenCalledWith(parentDivSelector + ' div.controls', plotSpec);
 

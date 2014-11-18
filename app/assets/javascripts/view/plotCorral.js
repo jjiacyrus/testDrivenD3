@@ -18,7 +18,9 @@ function PlotCorral(parentNode, corralNumber, experiment) {
         $(parentNode).append("<div class='controls'></div>");
         var controlNode = parentNode + ' div.controls';
         PlotControlBuilder.addXParameterSelector(controlNode, plotSpec);
+        PlotControlBuilder.addXScaleSelector(controlNode, plotSpec);
         PlotControlBuilder.addYParameterSelector(controlNode, plotSpec);
+        PlotControlBuilder.addYScaleSelector(controlNode, plotSpec);
         PlotControlBuilder.addXRangeSetter(controlNode, plotSpec);
         PlotControlBuilder.addYRangeSetter(controlNode, plotSpec);
 
