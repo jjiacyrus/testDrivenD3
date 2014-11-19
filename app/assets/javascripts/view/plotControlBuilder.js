@@ -105,6 +105,22 @@ PlotControlBuilder.singleton = (function () {
         });
     }
 
+    var addEditSpecsButton = function(parentNode) {
+        $(parentNode).append("<button class='editSpecification'>Change Specification</button>");
+        $(parentNode).append("<button class='hideControls' style='display:none'>Hide Controls</button>");
+        $(parentNode + " button.editSpecification").on('click', function(){
+            $(parentNode + " div.controls").slideDown();
+            $(parentNode +" button.editSpecification").hide();
+            $(parentNode + " button.hideControls").show();
+        });
+
+        $(parentNode + " button.hideControls").on('click', function(){
+            $(parentNode + " div.controls").slideUp();
+            $(parentNode +" button.hideControls").hide();
+            $(parentNode + " button.editSpecification").show();
+        });
+    }
+
     return {
         addCreateButtons: function
             (parentNode, plotCorral) {
@@ -129,7 +145,9 @@ PlotControlBuilder.singleton = (function () {
         },
 
         addDotPlotControls: function (parentNode, plotSpec) {
-            $(parentNode).append("<div class='controls'></div>");
+
+            addEditSpecsButton(parentNode);
+            $(parentNode).append("<div class='controls' style='display:none'></div>");
             var controlsNodeSelector = parentNode + " div.controls";
             addXParameterSelector(controlsNodeSelector, plotSpec);
             addXScaleSelector(controlsNodeSelector, plotSpec);
@@ -139,7 +157,8 @@ PlotControlBuilder.singleton = (function () {
             addYRangeSetter(controlsNodeSelector, plotSpec);
         },
         addHistogramControls: function (parentNode, plotSpec) {
-            $(parentNode).append("<div class='controls'></div>");
+            addEditSpecsButton(parentNode);
+            $(parentNode).append("<div class='controls' style='display:none'></div>");
             var controlsNodeSelector = parentNode + " div.controls";
             addXParameterSelector(controlsNodeSelector, plotSpec);
             addXScaleSelector(controlsNodeSelector, plotSpec);

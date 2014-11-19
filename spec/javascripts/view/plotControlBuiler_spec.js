@@ -39,15 +39,18 @@ describe("Plot Control Builder", function () {
         $(destroyButton).click();
         expect(destroySpy).toHaveBeenCalled();
     });
+
+
     it('should be able to create a dot plot set of controls', function () {
 
         affix("div#top-div");
-        var plotSpec = new PlotSpecification(CH1, CH2, new Range(2,100), new Range(5,170));
+        var plotSpec = new PlotSpecification(CH1, CH2, new Range(2, 100), new Range(5, 170));
 
         var parentSelector = 'div#top-div';
         PlotControlBuilder.singleton().addDotPlotControls(parentSelector, plotSpec);
-
+        checkEditSpecsButton(parentSelector);
         var controlsDiv = $('#top-div').find('div.controls');
+        expect($(controlsDiv).attr('style')).toEqual('display:none');
         expect(controlsDiv.length).toBeGreaterThan(0);
 
         var controlsSelector = parentSelector + ' div.controls';
@@ -63,12 +66,14 @@ describe("Plot Control Builder", function () {
     it('should be able to create a histogram plot set of controls', function () {
 
         affix("div#top-div");
-        var histogramSpec = new HistogramSpecification(CH1, new Range(5,170), 125);
+        var histogramSpec = new HistogramSpecification(CH1, new Range(5, 170), 125);
 
         var parentSelector = 'div#top-div';
         PlotControlBuilder.singleton().addHistogramControls(parentSelector, histogramSpec);
+        checkEditSpecsButton(parentSelector);
 
         var controlsDiv = $('#top-div').find('div.controls');
+        expect($(controlsDiv).attr('style')).toEqual('display:none');
         expect(controlsDiv.length).toBeGreaterThan(0);
 
         var controlsSelector = parentSelector + ' div.controls';
@@ -78,6 +83,44 @@ describe("Plot Control Builder", function () {
 
         checkBinSetterControls(controlsSelector, histogramSpec);
     });
+
+    function checkEditSpecsButton(parentSelector) {
+        var editSpec = $('#top-div').find('button.editSpecification');
+        var hideControls = $('#top-div').find('button.hideControls');
+
+        expect(editSpec.length).toBeGreaterThan(0);
+        expect($(editSpec).text()).toEqual('Change Specification');
+
+        expect(hideControls.length).toBeGreaterThan(0);
+        expect($(hideControls).text()).toEqual('Hide Controls');
+        expect($(hideControls).attr('style')).toEqual('display:none');
+
+        var slideDownSpy = spyOn($.fn, 'slideDown');
+        var slideUpSpy = spyOn($.fn, 'slideUp');
+        var hideSpy = spyOn($.fn, 'hide');
+        var showSpy = spyOn($.fn, 'show');
+
+        $(editSpec).click();
+        expect(slideDownSpy.calls.count()).toEqual(1);
+        expect(slideDownSpy.calls.mostRecent().object.selector).toEqual(parentSelector + ' div.controls');
+
+        expect(hideSpy.calls.count()).toEqual(1);
+        expect(hideSpy.calls.mostRecent().object.selector).toEqual(parentSelector + ' button.editSpecification');
+
+        expect(showSpy.calls.count()).toEqual(1);
+        expect(showSpy.calls.mostRecent().object.selector).toEqual(parentSelector + ' button.hideControls');
+
+        $(hideControls).click();
+
+        expect(slideUpSpy.calls.count()).toEqual(1);
+        expect(slideUpSpy.calls.mostRecent().object.selector).toEqual(parentSelector + ' div.controls');
+
+        expect(hideSpy.calls.count()).toEqual(2);
+        expect(hideSpy.calls.mostRecent().object.selector).toEqual(parentSelector + ' button.hideControls');
+
+        expect(showSpy.calls.count()).toEqual(2);
+        expect(showSpy.calls.mostRecent().object.selector).toEqual(parentSelector + ' button.editSpecification');
+    }
 
     function checkXParameterSelector(parentNode, plotSpec) {
         expect($($(parentNode).find('div.xLabel')).text()).toEqual('X Parameter');
