@@ -5,7 +5,7 @@ describe("Plot Control Builder", function () {
         affix("div#top-div");
 
         var plotCorral = new MockPlotCorral();
-        PlotControlBuilder.addCreateButtons('div#top-div', plotCorral);
+        PlotControlBuilder.singleton().addCreateButtons('div#top-div', plotCorral);
         var createDotPlotButton = $('#top-div').find('div.createButtons button.createDotPlot');
         expect(createDotPlotButton.length).toBeGreaterThan(0);
         expect($(createDotPlotButton).text()).toEqual('D');
@@ -32,23 +32,56 @@ describe("Plot Control Builder", function () {
         var plotCorral = new MockPlotCorral();
         var destroySpy = spyOn(plotCorral, 'destroyPlot');
 
-        PlotControlBuilder.addDestroyButton('#top-div', plotCorral);
+        PlotControlBuilder.singleton().addDestroyButton('#top-div', plotCorral);
         var destroyButton = $('#top-div').find('button.destroy');
         expect(destroyButton.length).toBeGreaterThan(0);
         expect($(destroyButton).text()).toEqual('x');
         $(destroyButton).click();
         expect(destroySpy).toHaveBeenCalled();
     });
-
-    it('should create a x parameter selector', function () {
+    it('should be able to create a dot plot set of controls', function () {
 
         affix("div#top-div");
+        var plotSpec = new PlotSpecification(CH1, CH2, new Range(2,100), new Range(5,170));
 
-        var plotSpec = new PlotSpecification();
-        plotSpec.setXParameter(CH2);
-        PlotControlBuilder.addXParameterSelector('#top-div', plotSpec);
-        expect($($('#top-div').find('div.xLabel')).text()).toEqual('X Parameter');
-        var xDropdown = $('#top-div').find('select.xParameter');
+        var parentSelector = 'div#top-div';
+        PlotControlBuilder.singleton().addDotPlotControls(parentSelector, plotSpec);
+
+        var controlsDiv = $('#top-div').find('div.controls');
+        expect(controlsDiv.length).toBeGreaterThan(0);
+
+        var controlsSelector = parentSelector + ' div.controls';
+        checkXParameterSelector(controlsSelector, plotSpec);
+        checkXScaleSelector(controlsSelector, plotSpec);
+        checkYParameterSelector(controlsSelector, plotSpec);
+        checkYScaleSelector(controlsSelector, plotSpec);
+        checkXRangeControls(controlsSelector, plotSpec);
+        checkYRangeControls(controlsSelector, plotSpec);
+
+
+    });
+    it('should be able to create a histogram plot set of controls', function () {
+
+        affix("div#top-div");
+        var histogramSpec = new HistogramSpecification(CH1, new Range(5,170), 125);
+
+        var parentSelector = 'div#top-div';
+        PlotControlBuilder.singleton().addHistogramControls(parentSelector, histogramSpec);
+
+        var controlsDiv = $('#top-div').find('div.controls');
+        expect(controlsDiv.length).toBeGreaterThan(0);
+
+        var controlsSelector = parentSelector + ' div.controls';
+        checkXParameterSelector(controlsSelector, histogramSpec);
+        checkXScaleSelector(controlsSelector, histogramSpec);
+        checkXRangeControls(controlsSelector, histogramSpec);
+
+        checkBinSetterControls(controlsSelector, histogramSpec);
+    });
+
+    function checkXParameterSelector(parentNode, plotSpec) {
+        expect($($(parentNode).find('div.xLabel')).text()).toEqual('X Parameter');
+        var xDropdown = $(parentNode).find('select.xParameter');
         expect(xDropdown.length).toBeGreaterThan(0);
         var xOptions = xDropdown.find('option');
         expect(xOptions.length).toEqual(4);
@@ -64,16 +97,11 @@ describe("Plot Control Builder", function () {
         $('select.xParameter>option:eq(3)').prop('selected', true);
         $('select.xParameter').change();
         expect(plotSpec.getXParameter()).toEqual(CH4);
-    });
+    }
 
-    it('should create a x scale selector', function () {
 
-        affix("div#top-div");
-
-        var plotSpec = new PlotSpecification();
-        plotSpec.setXScale(LOG);
-        PlotControlBuilder.addXScaleSelector('#top-div', plotSpec);
-        var xDropdown = $('#top-div').find('select.xScale');
+    function checkXScaleSelector(parentNode, plotSpec) {
+        var xDropdown = $(parentNode).find('select.xScale');
         expect(xDropdown.length).toBeGreaterThan(0);
         var xOptions = xDropdown.find('option');
         expect(xOptions.length).toEqual(2);
@@ -85,94 +113,11 @@ describe("Plot Control Builder", function () {
         $('select.xScale>option:eq(0)').prop('selected', true);
         $('select.xScale').change();
         expect(plotSpec.getXScale()).toEqual(LIN);
-    });
+    }
 
-    it('should create a y scale selector', function () {
-
-        affix("div#top-div");
-
-        var plotSpec = new PlotSpecification();
-        plotSpec.setYScale(LOG);
-        PlotControlBuilder.addYScaleSelector('#top-div', plotSpec);
-        var yDropdown = $('#top-div').find('select.yScale');
-        expect(yDropdown.length).toBeGreaterThan(0);
-        var yOptions = yDropdown.find('option');
-        expect(yOptions.length).toEqual(2);
-        expect($(yOptions[0]).attr('value')).toEqual(LIN);
-        expect($(yOptions[0]).text()).toEqual('Linear');
-        expect($(yOptions[1]).attr('value')).toEqual(LOG);
-        expect($(yOptions[1]).text()).toEqual('Log');
-        expect(yDropdown.find('option:selected').attr('value')).toEqual(plotSpec.getYScale());
-        $('select.yScale>option:eq(0)').prop('selected', true);
-        $('select.yScale').change();
-        expect(plotSpec.getYScale()).toEqual(LIN);
-    });
-
-    it('creates an x range setter', function () {
-        affix("div#top-div");
-
-        var plotSpec = new PlotSpecification();
-        var range = new Range(21, 42);
-        plotSpec.setXRange(range);
-
-        PlotControlBuilder.addXRangeSetter('#top-div', plotSpec);
-
-        var xRangeDiv = $($('#top-div').find('div.xRangeSelector'));
-        expect($(xRangeDiv.find('div.xRangeLabel')).text()).toEqual('X Range');
-        var xMin = $(xRangeDiv.find('input.xRangeMin'));
-        var xMax = $(xRangeDiv.find('input.xRangeMax'));
-        expect(xMin.val()).toEqual('21');
-        expect(xMin.attr('type')).toEqual('text');
-        expect(xMax.val()).toEqual('42');
-        expect(xMax.attr('type')).toEqual('text');
-
-        var setXRangeButton = $($(xRangeDiv).find('button.setXRange'));
-        expect(setXRangeButton.text()).toEqual('Set X Range');
-        xMin.val(69);
-        xMax.val(290);
-
-        setXRangeButton.click();
-
-        expect(new Range(69, 290)).toEqual(plotSpec.getXRange());
-    })
-
-    it('creates an y range setter', function () {
-        affix("div#top-div");
-
-        var plotSpec = new PlotSpecification();
-        var range = new Range(221, 442);
-        plotSpec.setYRange(range);
-
-        PlotControlBuilder.addYRangeSetter('#top-div', plotSpec);
-
-        var yRangeDiv = $($('#top-div').find('div.yRangeSelector'));
-        expect($(yRangeDiv.find('div.yRangeLabel')).text()).toEqual('Y Range');
-        var yMin = $(yRangeDiv.find('input.yRangeMin'));
-        var yMax = $(yRangeDiv.find('input.yRangeMax'));
-        expect(yMin.val()).toEqual('221');
-        expect(yMin.attr('type')).toEqual('text');
-        expect(yMax.val()).toEqual('442');
-        expect(yMax.attr('type')).toEqual('text');
-
-        var setYRangeButton = $($(yRangeDiv).find('button.setYRange'));
-        expect(setYRangeButton.text()).toEqual('Set Y Range');
-        yMin.val(69);
-        yMax.val(290);
-
-        setYRangeButton.click();
-
-        expect(new Range(69, 290)).toEqual(plotSpec.getYRange());
-    })
-    it('should create a y parameter selector', function () {
-
-        affix("div#top-div");
-
-
-        var plotSpec = new PlotSpecification();
-        plotSpec.setYParameter(CH4);
-        PlotControlBuilder.addYParameterSelector('#top-div', plotSpec);
-        expect($($('#top-div').find('div.yLabel')).text()).toEqual('Y Parameter');
-        var yDropdown = $('#top-div').find('select.yParameter');
+    function checkYParameterSelector(parentNode, plotSpec) {
+        expect($($(parentNode).find('div.yLabel')).text()).toEqual('Y Parameter');
+        var yDropdown = $(parentNode).find('select.yParameter');
         expect(yDropdown.length).toBeGreaterThan(0);
         var yOptions = yDropdown.find('option');
         expect(yOptions.length).toEqual(4);
@@ -188,20 +133,73 @@ describe("Plot Control Builder", function () {
         $('select.yParameter>option:eq(0)').prop('selected', true);
         $('select.yParameter').change();
         expect(plotSpec.getYParameter()).toEqual(CH1);
-    });
+    }
 
 
-    it('creates a bin setter', function () {
-        targetDiv = affix("div#top-div");
-        var spec = new HistogramSpecification(CH1, new Range(0,1), 15);
-        PlotControlBuilder.addBinSetter('#top-div', spec);
-        expect($('#top-div').find('div.numberOfBinsLabel').text()).toEqual('Number of Bins');
-        var binInput = $('#top-div').find('input.numberOfBins');
+    function checkYScaleSelector(parentNode, plotSpec) {
+        var yDropdown = $(parentNode).find('select.yScale');
+        expect(yDropdown.length).toBeGreaterThan(0);
+        var yOptions = yDropdown.find('option');
+        expect(yOptions.length).toEqual(2);
+        expect($(yOptions[0]).attr('value')).toEqual(LIN);
+        expect($(yOptions[0]).text()).toEqual('Linear');
+        expect($(yOptions[1]).attr('value')).toEqual(LOG);
+        expect($(yOptions[1]).text()).toEqual('Log');
+        expect(yDropdown.find('option:selected').attr('value')).toEqual(plotSpec.getYScale());
+        $('select.yScale>option:eq(0)').prop('selected', true);
+        $('select.yScale').change();
+        expect(plotSpec.getYScale()).toEqual(LIN);
+    }
+
+    function checkXRangeControls(parentNode, plotSpec) {
+        var xRangeDiv = $($(parentNode).find('div.xRangeSelector'));
+        expect($(xRangeDiv.find('div.xRangeLabel')).text()).toEqual('X Range');
+        var xMin = $(xRangeDiv.find('input.xRangeMin'));
+        var xMax = $(xRangeDiv.find('input.xRangeMax'));
+        expect(xMin.val()).toEqual(plotSpec.getXRange().min + '');
+        expect(xMin.attr('type')).toEqual('text');
+        expect(xMax.val()).toEqual(plotSpec.getXRange().max + '');
+        expect(xMax.attr('type')).toEqual('text');
+
+        var setXRangeButton = $($(xRangeDiv).find('button.setXRange'));
+        expect(setXRangeButton.text()).toEqual('Set X Range');
+        xMin.val(69);
+        xMax.val(290);
+
+        setXRangeButton.click();
+
+        expect(new Range(69, 290)).toEqual(plotSpec.getXRange());
+    }
+
+    function checkYRangeControls(parentNode, plotSpec) {
+        var yRangeDiv = $($(parentNode).find('div.yRangeSelector'));
+        expect($(yRangeDiv.find('div.yRangeLabel')).text()).toEqual('Y Range');
+        var yMin = $(yRangeDiv.find('input.yRangeMin'));
+        var yMax = $(yRangeDiv.find('input.yRangeMax'));
+        expect(yMin.val()).toEqual(plotSpec.getYRange().min + '');
+        expect(yMin.attr('type')).toEqual('text');
+        expect(yMax.val()).toEqual(plotSpec.getYRange().max + '');
+        expect(yMax.attr('type')).toEqual('text');
+
+        var setYRangeButton = $($(yRangeDiv).find('button.setYRange'));
+        expect(setYRangeButton.text()).toEqual('Set Y Range');
+        yMin.val(69);
+        yMax.val(290);
+
+        setYRangeButton.click();
+
+        expect(new Range(69, 290)).toEqual(plotSpec.getYRange());
+    }
+
+
+    function checkBinSetterControls(parentNode, spec) {
+        expect($(parentNode).find('div.numberOfBinsLabel').text()).toEqual('Number of Bins');
+        var binInput = $(parentNode).find('input.numberOfBins');
         expect($(binInput).attr('type')).toEqual('text');
         expect($(binInput).val()).toEqual('' + spec.getNumberOfBins());
         $(binInput).val('24');
         $(binInput).blur();
         expect(spec.getNumberOfBins()).toEqual(24);
-    });
+    }
 
-    });
+});

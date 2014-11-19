@@ -4,11 +4,12 @@ describe("Plot Corral", function () {
     it('should create the set of create buttons on construction', function () {
         var parentDivSelector = "div#top-div";
         affix(parentDivSelector);
-        var addCreateButtonSpy = spyOn(PlotControlBuilder, 'addCreateButtons');
+        var mockBuilder = new MockPlotControlBuilder();
+        spyOn(PlotControlBuilder, 'singleton').and.returnValue(mockBuilder);
 
         var experiment = new Experiment();
         var plotCorral = new PlotCorral('div#top-div', 1, experiment);
-        expect(addCreateButtonSpy).toHaveBeenCalledWith(parentDivSelector, plotCorral);
+        expect(mockBuilder.addCreateButtons).toHaveBeenCalledWith(parentDivSelector, plotCorral);
 
     });
 
@@ -20,16 +21,9 @@ describe("Plot Corral", function () {
         var experiment = new Experiment();
         var plotCorral = new PlotCorral('div#top-div', 1, experiment);
         var mockDotPlot = new MockDotPlot();
+        var mockBuilder = new MockPlotControlBuilder();
         var dotPlotConstructorSpy = spyOn(window, 'DotPlot').and.returnValue(mockDotPlot);
-        var addDestroyButtonSpy = spyOn(PlotControlBuilder, 'addDestroyButton');
-        var addXParameterSelectorSpy = spyOn(PlotControlBuilder, 'addXParameterSelector');
-        var addXScaleSelectorSpy = spyOn(PlotControlBuilder, 'addXScaleSelector');
-
-        var addYParameterSelectorSpy = spyOn(PlotControlBuilder, 'addYParameterSelector');
-        var addYScaleSelectorSpy = spyOn(PlotControlBuilder, 'addYScaleSelector');
-
-        var addXRangeSetterSpy = spyOn(PlotControlBuilder, 'addXRangeSetter');
-        var addYRangeSetterSpy = spyOn(PlotControlBuilder, 'addYRangeSetter');
+        spyOn(PlotControlBuilder, 'singleton').and.returnValue(mockBuilder);
 
         plotCorral.createDotPlot();
 
@@ -42,13 +36,8 @@ describe("Plot Corral", function () {
         expect(arguments[2]).toEqual(experiment);
         expect($('#top-div').find('div#canvas1').length).toBeGreaterThan(0);
         expect(mockDotPlot.renderCalled).toBeTruthy();
-        expect(addDestroyButtonSpy).toHaveBeenCalledWith(parentDivSelector, plotCorral);
-        expect(addXParameterSelectorSpy).toHaveBeenCalledWith(parentDivSelector + ' div.controls', plotSpec);
-        expect(addXScaleSelectorSpy).toHaveBeenCalledWith(parentDivSelector + ' div.controls', plotSpec);
-        expect(addYParameterSelectorSpy).toHaveBeenCalledWith(parentDivSelector + ' div.controls', plotSpec);
-        expect(addYScaleSelectorSpy).toHaveBeenCalledWith(parentDivSelector + ' div.controls', plotSpec);
-        expect(addXRangeSetterSpy).toHaveBeenCalledWith(parentDivSelector + ' div.controls', plotSpec);
-        expect(addYRangeSetterSpy).toHaveBeenCalledWith(parentDivSelector + ' div.controls', plotSpec);
+        expect(mockBuilder.addDestroyButton).toHaveBeenCalledWith(parentDivSelector, plotCorral);
+        expect(mockBuilder.addDotPlotControls).toHaveBeenCalledWith(parentDivSelector, plotSpec);
 
     });
 
@@ -61,10 +50,8 @@ describe("Plot Corral", function () {
         var plotCorral = new PlotCorral('div#top-div', 1, experiment);
         var mockHistogram = new MockHistogramPlot();
         var constructorSpy = spyOn(window, 'HistogramPlot').and.returnValue(mockHistogram);
-        var addDestroyButtonSpy = spyOn(PlotControlBuilder, 'addDestroyButton');
-        var addXParameterSelectorSpy = spyOn(PlotControlBuilder, 'addXParameterSelector');
-        var addBinSetterSpy = spyOn(PlotControlBuilder, 'addBinSetter');
-        var addXRangeSetterSpy = spyOn(PlotControlBuilder, 'addXRangeSetter');
+        var mockBuilder = new MockPlotControlBuilder();
+        spyOn(PlotControlBuilder, 'singleton').and.returnValue(mockBuilder);
 
         plotCorral.createHistogramPlot();
 
@@ -77,10 +64,8 @@ describe("Plot Corral", function () {
         expect(arguments[2]).toEqual(experiment);
         expect($('#top-div').find('div#canvas1').length).toBeGreaterThan(0);
         expect(mockHistogram.renderCalled).toBeTruthy();
-        expect(addDestroyButtonSpy).toHaveBeenCalledWith(parentNodeSelector, plotCorral);
-        expect(addXParameterSelectorSpy).toHaveBeenCalledWith(parentNodeSelector + ' div.controls', histogramSpec);
-        expect(addBinSetterSpy).toHaveBeenCalledWith(parentNodeSelector + ' div.controls', histogramSpec);
-        expect(addXRangeSetterSpy).toHaveBeenCalledWith(parentNodeSelector + ' div.controls', histogramSpec);
+        expect(mockBuilder.addDestroyButton).toHaveBeenCalledWith(parentNodeSelector, plotCorral);
+        expect(mockBuilder.addHistogramControls).toHaveBeenCalledWith(parentNodeSelector , histogramSpec);
 
 
     });
@@ -142,7 +127,8 @@ describe("Plot Corral", function () {
         plotCorral.createDotPlot();
         plotCorral.createHistogramPlot();
 
-        var addCreateButtonSpy = spyOn(PlotControlBuilder, 'addCreateButtons');
+        var mockBuilder = new MockPlotControlBuilder();
+        spyOn(PlotControlBuilder, 'singleton').and.returnValue(mockBuilder);
 
         plotCorral.destroyPlot();
         expect(destroyDotPlotSpy).toHaveBeenCalled();
@@ -151,7 +137,7 @@ describe("Plot Corral", function () {
         expect($('#top-div').find('div#contents2').length).toEqual(0);
 
 
-        expect(addCreateButtonSpy).toHaveBeenCalledWith(parentNodeSelector, plotCorral);
+        expect(mockBuilder.addCreateButtons).toHaveBeenCalledWith(parentNodeSelector, plotCorral);
 
 
     });
